@@ -1,3 +1,23 @@
 {
-    "extends": ["react-app"]
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-restricted-globals": "off",
+    "@typescript-eslint/no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": false,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
+    ]
   }
+}
