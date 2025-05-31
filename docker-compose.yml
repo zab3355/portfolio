@@ -1,0 +1,10 @@
+services:
+
+  ui:
+    build:
+      context: ./  # Project root
+      dockerfile: src/Dockerfile.ui
+    container_name: ui
+    ports:
+      - "3001:3000"
+      
