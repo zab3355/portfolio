@@ -17,7 +17,7 @@ export const lightTheme = createTheme({
       },
       background: {
         default: grey[50],
-        paper: grey[100],
+        paper: grey[900],
       },
       text: {
         primary: grey[900],
@@ -32,11 +32,11 @@ export const lightTheme = createTheme({
       navbarDrawer: {
         background: orange[600]
       },
-      scrollToTopButton: {  
+      orangePalette: {
         background: deepOrange[500],
         backgroundHover: orange[700],
       },
-      progressBar: {  
+      progressBar: {
         background: grey[50],
         backgroundForeground: deepOrange[700],
       },

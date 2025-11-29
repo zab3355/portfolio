@@ -1,10 +1,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-
-interface ThemeContextProps {
-  isMobile: boolean;
-}
+import { ThemeContextProps } from '../shared/types/types';
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 

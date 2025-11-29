@@ -3,18 +3,18 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import './assets/fonts/fonts.css';
-import Home from './pages/Home';
-import Portfolio from './pages/Portfolio';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
-import Layout from './components/Layout';
+import Home from './pages/home';
+import Portfolio from './pages/portfolio';
+import Blog from './pages/blog/blog';
+import Contact from './pages/contact';
+import Layout from './components/layout';
 import { lightTheme } from './shared/styles/lightTheme';
 import { darkTheme } from './shared/styles/darkTheme';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Navbar from './components/navbar';
+import Footer from './components/footer';
 import { ThemeProviderWrapper } from './context/ThemeContext';
 import PersonalTemplate from './pages/personal/personalTemplate';
-import { mindexConstants, nbcUniversalConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants } from './shared/constants/constants';
+import { mindexConstants, underConstructionConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
 import WorkTemplate from './pages/work/workTemplate';
 
 const App = () => {
@@ -34,14 +34,16 @@ const App = () => {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="portfolio" element={<Portfolio />} />
+              <Route path="blog" element={<Blog />} />
               <Route path="contact" element={<Contact />} />
-              <Route path="/nbcUniversal" element={<WorkTemplate {...nbcUniversalConstants} />} />
+              <Route path="/nbcUniversal" element={<WorkTemplate {...underConstructionConstants} />} />
               <Route path="/mindex" element={<WorkTemplate {...mindexConstants} />} />
               <Route path="/sandboxUnion" element={<WorkTemplate {...sandboxUnionConstants} />} />
               <Route path="/wegmans" element={<WorkTemplate {...wegmansConstants} />} />
+              <Route path="/osmose" element={<WorkTemplate {...OsmoseConstants} />} />
+              <Route path="/si" element={<WorkTemplate {...SiConstants} />} />
               <Route path="/theShore" element={<WorkTemplate {...theShoreConstants} />} />
               <Route path="/weatherWatcher" element={<WorkTemplate {...weatherWatcherConstants} />} />
-
               <Route path="/theShore" element={<PersonalTemplate {...theShoreConstants} />} />
               <Route path="/weatherWatcher" element={<PersonalTemplate {...weatherWatcherConstants} />} />
             </Route>

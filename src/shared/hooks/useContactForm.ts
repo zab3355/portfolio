@@ -1,34 +1,54 @@
-import { useState } from 'react';
+// src/shared/hooks/useContactForm.ts
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { ref, push, set } from 'firebase/database';
-import { ContactFormData } from '../types/types';
+import { useState } from 'react';
+import { ref, push } from 'firebase/database';
 import { database } from '../../firebase/firebaseConfig';
+import { ContactFormData } from '../types/types';
 
-const useContactForm = () => {
-  const { handleSubmit, control, formState: { errors, isValid } } = useForm<ContactFormData>({ mode: 'onChange' });
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
+export default function useContactForm() {
   const [submitted, setSubmitted] = useState(false);
 
-  const onSubmit: SubmitHandler<ContactFormData> = async (data) => {
-    try {
-      
-      // Get a reference to the "contactForms" path in your database
-      const contactFormsRef = ref(database, 'contactForms');
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isValid, isSubmitting },
+    reset,
+  } = useForm<ContactFormData>({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+  });
 
-      // Push a new entry with the form data
-      const newContactRef = push(contactFormsRef);
-      
-      // Set the data for the new entry
-      await set(newContactRef, {
-        name: data.name,
-        email: data._replyto,
-        subject: data.subject,
-        message: data.message,
-      });
+  const submitForm: SubmitHandler<ContactFormData> = async (data) => {
+    // 1) Store in Firebase
+    const messagesRef = ref(database, 'messages');
+    await push(messagesRef, {
+      ...data,
+      timestamp: new Date().toISOString(),
+    });
 
-      setSubmitted(true); // Update the submitted state
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    // 2) Send to API (Docker: http://server:8080, dev: can be empty => relative)
+    const res = await fetch(`${API_BASE}/api/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      const msg = body?.message || 'Failed to send the message.';
+      throw new Error(msg);
     }
+
+    reset();
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 6000);
   };
 
   return {
@@ -36,9 +56,8 @@ const useContactForm = () => {
     control,
     errors,
     isValid,
+    isSubmitting,
     submitted,
-    onSubmit,
+    submitForm,
   };
-};
-
-export default useContactForm;
+}

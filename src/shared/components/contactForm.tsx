@@ -1,185 +1,279 @@
-import { Alert, Box, Button, Snackbar, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  ButtonProps,
+  Grid,
+  Snackbar,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { styled } from '@mui/system';
 import { Controller } from 'react-hook-form';
-import useContactForm from '../../shared/hooks/useContactForm';
-import { contactText } from '../../shared/constants/constants';
+import useContactForm from '../hooks/useContactForm';
+import { contactForm, contactText } from '../constants/constants';
+import { useState } from 'react';
+import { ContactFormData } from '../types/types';
 
-const FormContainer = styled(Box)({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  padding: '2rem',
-});
-
-const FormSection = styled(Box)({
-  flex: 1,
-  paddingRight: '2rem',             
-});
- 
-const ImageSection = styled(Box)({
-  flex: 1,
-  display: 'block',
-  alignSelf: 'flex-start',
-});
-
-const ContactTitleText = styled(Typography)(() => ({
- fontFamily: 'Poppins', 
- fontWeight: '700', 
- justifyContent: 'left', 
- display: 'flex', 
- fontSize: '42px',
+const StyledContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(4),
+  maxWidth: 1200,
+  margin: '0 auto',
+  width: '100%',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2),
+  },
 }));
 
-const ContactDescriptionText = styled(Typography)(() => ({
-  justifyContent: 'left', 
-  fontSize: '16px',
-  fontWeight: '400',
+const Title = styled(Typography)(({ theme }) => ({
+  fontFamily: 'Poppins',
+  fontWeight: 700,
+  fontSize: '2.5rem',
+  marginBottom: theme.spacing(2),
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '2rem',
+  },
+}));
+
+const Description = styled(Typography)(({ theme }) => ({
+  fontSize: '1rem',
+  fontWeight: 400,
+  marginBottom: theme.spacing(4),
+  color: theme.palette.text.secondary,
   fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
- }));
+}));
 
-const ContactForm = () => {
-  const { handleSubmit, control, errors, isValid, submitted, onSubmit } = useContactForm();
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    '&:hover fieldset': {
+      borderColor: theme.palette.custom.primary.main,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.custom.primary.main,
+    },
+  },
+  '& label.Mui-focused': {
+    color: theme.palette.custom.primary.main,
+  },
+}));
 
-    return (
-      <div>
-          <FormContainer>
-          <ImageSection>
-<ContactTitleText>
-  {contactText.title}
-</ContactTitleText>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '14px',
-          marginBottom: '40px',
-        }}
-      >
+const SendMessageButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  float: 'right',
+  backgroundColor: theme.palette.custom.primary.main,
+  color: theme.palette.custom.base.white,
+  padding: theme.spacing(1, 3),
+  border: '2px solid transparent',
+  '&:hover': {
+    backgroundColor: 'transparent',
+    borderColor: theme.palette.custom.primary.main,
+  },
+}));
 
-        <Box
-          sx={{
-            position: 'absolute',
-            left: '3%',
-            transform: 'translateX(-50%)',
-            width: '12px',
-            height: '12px',
-            borderRadius: '50%',
-            backgroundColor: '#e45447',
-          }}
-        ></Box>
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '150px',
-            height: '2px',
-            left: '3%',
-            backgroundColor: '#e45447',
-          }}
-        >
-        </Box>
-      </Box>
-      <ContactDescriptionText>{contactText.about}</ContactDescriptionText>
 
-    </ImageSection>
-            <FormSection>
-              <form onSubmit={handleSubmit(onSubmit)}>
+const SectionDivider = styled(Box)(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: 32,
+  position: 'relative',
+  paddingLeft: 80,
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    width: 12,
+    height: 12,
+    borderRadius: '50%',
+    backgroundColor: '#e45447',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    left: 12,
+    width: 150,
+    height: 2,
+    backgroundColor: '#e45447',
+  },
+}));
+
+export default function ContactForm() {
+  const {
+    handleSubmit,
+    control,
+    errors,
+    isValid,
+    isSubmitting,
+    submitted,
+    submitForm,
+  } = useContactForm();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleFormSubmit = async (data: ContactFormData) => {
+    setError(null);
+    try {
+      await submitForm(data);
+      setSuccess(true);
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : contactForm.errorMessage;
+      setError(msg);
+    }
+  };
+
+  const snackbarSx = isMobile
+    ? { width: '90vw', left: '50%', transform: 'translateX(-50%)', bottom: 16 }
+    : { minWidth: 400 };
+
+  return (
+    <StyledContainer>
+      <Grid container spacing={isMobile ? 2 : 4}>
+        <Grid item xs={12}>
+          <Title>{contactText.title}</Title>
+          <SectionDivider />
+          <Description>{contactText.about}</Description>
+        </Grid>
+
+        <Grid item xs={12}>
+          <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
                 <Controller
-      name="name"
-      control={control}
-      defaultValue=""
-      rules={{ required: 'Name is required' }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Enter Name"
-          variant="outlined"
-          margin="normal"
-          fullWidth
-          error={!!errors.name}
-          helperText={errors.name ? (errors.name.message as string) : ""}
-        />
-      )}
-    />
-    <Controller
-      name="_replyto"
-      control={control}
-      defaultValue=""
-      rules={{
-        required: 'Email is required',
-        pattern: {
-          value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-          message: 'Invalid email address',
-        },
-      }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Enter Email Address"
-          variant="outlined"
-          margin="normal"
-          fullWidth
-          error={!!errors._replyto}
-          helperText={errors._replyto ? (errors._replyto.message as string) : ""}
-        />
-      )}
-    />
-    <Controller
-      name="subject"
-      control={control}
-      defaultValue=""
-      rules={{ required: 'Subject is required' }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Enter Subject"
-          variant="outlined"
-          margin="normal"
-          fullWidth
-          error={!!errors.subject}
-          helperText={errors.subject ? (errors.subject.message as string) : ""}
-        />
-      )}
-    />
-    <Controller
-      name="message"
-      control={control}
-      defaultValue=""
-      rules={{ required: 'Message is required' }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Enter Message"
-          variant="outlined"
-          margin="normal"
-          fullWidth
-          multiline
-          rows={4}
-          error={!!errors.message}
-          helperText={errors.message ? (errors.message.message as string) : ""}
-        />
-      )}
-    />
-    <Button
-      type="submit"
-      variant="contained"
-      color="primary"
-      disabled={!isValid}
-      style={{ marginTop: '1rem', float: 'right' }}
-    >
-      Send Message
-    </Button>
-  </form>
-  {submitted && <Snackbar open={submitted} autoHideDuration={6000}><Alert
-severity="success"
-variant="filled"
-sx={{ width: '100%' }}
->
-This is a success Alert inside a Snackbar!
-</Alert></Snackbar>}
-</FormSection> 
-</FormContainer>
-</div>
-);
-};
-export default ContactForm;
+                  name="name"
+                  control={control}
+                  rules={{ required: 'Name is required' }}
+                  render={({ field }) => (
+                    <StyledTextField
+                      {...field}
+                      label="Enter Name"
+                      variant="outlined"
+                      fullWidth
+                      error={!!errors.name}
+                      helperText={errors.name?.message ?? ''}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{
+                    required: 'Email is required',
+                    pattern: {
+                      value:
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                      message: 'Invalid email address',
+                    },
+                  }}
+                  render={({ field }) => (
+                    <StyledTextField
+                      {...field}
+                      label="Enter Email Address"
+                      variant="outlined"
+                      fullWidth
+                      error={!!errors.email}
+                      helperText={errors.email?.message ?? ''}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Controller
+                  name="subject"
+                  control={control}
+                  rules={{ required: 'Subject is required' }}
+                  render={({ field }) => (
+                    <StyledTextField
+                      {...field}
+                      label="Enter Subject"
+                      variant="outlined"
+                      fullWidth
+                      error={!!errors.subject}
+                      helperText={errors.subject?.message ?? ''}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Controller
+                  name="message"
+                  control={control}
+                  rules={{ required: 'Message is required' }}
+                  render={({ field }) => (
+                    <StyledTextField
+                      {...field}
+                      label="Enter Message"
+                      variant="outlined"
+                      fullWidth
+                      multiline
+                      rows={4}
+                      error={!!errors.message}
+                      helperText={errors.message?.message ?? ''}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <SendMessageButton
+                    type="submit"
+                    variant="contained"
+                    disabled={!isValid || isSubmitting}
+                    fullWidth={isMobile}
+                  >
+                    {isSubmitting ? 'Sending…' : 'Send Message'}
+                  </SendMessageButton>
+                </Box>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
+
+      <Snackbar
+        open={success || submitted}
+        autoHideDuration={6000}
+        onClose={() => setSuccess(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={snackbarSx}
+      >
+        <Alert
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+          onClose={() => setSuccess(false)}
+        >
+          {contactForm.successMessage}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={snackbarSx}
+      >
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+          onClose={() => setError(null)}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+    </StyledContainer>
+  );
+}
+

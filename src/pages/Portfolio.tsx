@@ -7,8 +7,8 @@ import About from '../shared/components/about';
 const AnimationContainer = styled(Box)({
   animation: 'fadeIn 1s',
   "@keyframes fadeIn": {
-    "0%":{ opacity: 0 },
-    "100%":{ opacity: 1 }
+    "0%": { opacity: 0 },
+    "100%": { opacity: 1 }
   }
 });
 const SplashContainer = styled(Box)({
@@ -22,7 +22,7 @@ const SplashContainer = styled(Box)({
 });
 
 const ImageText = styled(Typography)(({ theme }) => ({
-  position:'absolute',
+  position: 'absolute',
   fontSize: '50px',
   marginTop: '320px',
   marginLeft: '20px',
@@ -37,7 +37,7 @@ const Portfolio = () => {
       <ImageText>Portfolio</ImageText>
       <SplashContainer />
       <About />
-      <Projects/>
+      <Projects />
     </AnimationContainer>
   );
 };

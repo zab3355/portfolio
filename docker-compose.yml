@@ -1,10 +1,30 @@
 services:
-
   ui:
     build:
-      context: ./  # Project root
-      dockerfile: src/Dockerfile.ui
-    container_name: ui
+      context: .
+      dockerfile: Dockerfile.ui
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
+        REACT_APP_FIREBASE_API_KEY: ${REACT_APP_FIREBASE_API_KEY}
+        REACT_APP_FIREBASE_AUTH_DOMAIN: ${REACT_APP_FIREBASE_AUTH_DOMAIN}
+        REACT_APP_FIREBASE_PROJECT_ID: ${REACT_APP_FIREBASE_PROJECT_ID}
+        REACT_APP_FIREBASE_STORAGE_BUCKET: ${REACT_APP_FIREBASE_STORAGE_BUCKET}
+        REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${REACT_APP_FIREBASE_MESSAGING_SENDER_ID}
+        REACT_APP_FIREBASE_APP_ID: ${REACT_APP_FIREBASE_APP_ID}
+        REACT_APP_FIREBASE_DATABASE_URL: ${REACT_APP_FIREBASE_DATABASE_URL}
+    env_file:
+      - .env
+    depends_on:
+      - server
     ports:
-      - "3001:3000"
-      
+      - "3000:80"  
+
+  server:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.server
+    env_file:
+      - .env
+    ports:
+      - "8080:8080" 
+    restart: unless-stopped

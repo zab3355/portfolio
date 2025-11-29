@@ -1,13 +1,11 @@
-import React from 'react';
+import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
-const Layout: React.FC = () => {
+const Layout = () => {
   return (
-    <div>
-      <main>
-        <Outlet />
-      </main>
-    </div>
+    <Box component="main" sx={{ width: '100%', minHeight: '100vh' }}>
+      <Outlet />
+    </Box>
   );
 };
 
