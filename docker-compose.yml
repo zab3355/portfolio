@@ -17,7 +17,7 @@ services:
     depends_on:
       - server
     ports:
-      - "3000:80"  
+      - "3001:80"  
 
   server:
     build:
