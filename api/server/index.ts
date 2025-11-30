@@ -2,10 +2,23 @@ import express from "express";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import path from "path";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',     
+      'http://localhost:8080',    
+      'https://portfolio.zabrown.com',
+      'https://zabrown.com', 
+    ],
+    methods: ['POST', 'GET', 'OPTIONS'],
+  })
+);
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {

@@ -1,4 +1,3 @@
-// src/shared/hooks/useContactForm.ts
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import { ref, push } from 'firebase/database';
@@ -6,7 +5,6 @@ import { database } from '../../firebase/firebaseConfig';
 import { ContactFormData } from '../types/types';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
-
 export default function useContactForm() {
   const [submitted, setSubmitted] = useState(false);
 
@@ -33,7 +31,7 @@ export default function useContactForm() {
       timestamp: new Date().toISOString(),
     });
 
-    // 2) Send to API (Docker: http://server:8080, dev: can be empty => relative)
+    // 2) Send to API
     const res = await fetch(`${API_BASE}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
