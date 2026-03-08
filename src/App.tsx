@@ -16,6 +16,7 @@ import { ThemeProviderWrapper } from './context/ThemeContext';
 import PersonalTemplate from './pages/personal/personalTemplate';
 import { mindexConstants, underConstructionConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
 import WorkTemplate from './pages/work/workTemplate';
+import CustomCursor from './shared/components/CustomCursor';
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -26,6 +27,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <CustomCursor />
       <ThemeProviderWrapper>
         <CssBaseline />
         <BrowserRouter>
