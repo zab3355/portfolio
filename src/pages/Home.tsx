@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CircleButton from '../shared/components/circleButton';
@@ -62,6 +62,8 @@ const Home = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const accent = theme.palette.custom.orangePalette.background;
+
+  const [scrollHovered, setScrollHovered] = useState(false);
 
   const handleScroll = useCallback(() => {
     window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
@@ -139,15 +141,27 @@ const Home = () => {
           </ViewProjectBox>
         </ContentContainer>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator — glows orange on hover */}
         <ScrollIndicator
           onClick={handleScroll}
+          onMouseEnter={() => setScrollHovered(true)}
+          onMouseLeave={() => setScrollHovered(false)}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleScroll(); }}
           role="button"
           tabIndex={0}
           aria-label="Scroll to projects"
         >
-          <Box sx={{ width: '1px', height: '60px', backgroundColor: 'rgba(255,255,255,0.2)', position: 'relative', overflow: 'hidden' }}>
+          <Box
+            sx={{
+              width: '1px',
+              height: '60px',
+              backgroundColor: scrollHovered ? accent : 'rgba(255,255,255,0.2)',
+              boxShadow: scrollHovered ? `0 0 10px ${accent}, 0 0 20px ${accent}55` : 'none',
+              position: 'relative',
+              overflow: 'hidden',
+              transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+            }}
+          >
             <motion.div
               style={{
                 position: 'absolute',
@@ -159,10 +173,19 @@ const Home = () => {
                 backgroundColor: accent,
               }}
               animate={{ y: [0, 40, 0] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              transition={{ duration: scrollHovered ? 0.7 : 1.6, repeat: Infinity, ease: 'easeInOut' }}
             />
           </Box>
-          <Typography sx={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: 'Poppins' }}>
+          <Typography
+            sx={{
+              fontSize: '10px',
+              color: scrollHovered ? accent : 'rgba(255,255,255,0.4)',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              fontFamily: 'Poppins',
+              transition: 'color 0.3s ease',
+            }}
+          >
             scroll
           </Typography>
         </ScrollIndicator>

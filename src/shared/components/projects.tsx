@@ -4,7 +4,6 @@ import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { projectText, projectBoxes } from '../constants/constants';
-import SectionHeader from './sectionHeader';
 
 // All styled components defined OUTSIDE the component — created once, not on every render
 
@@ -68,7 +67,7 @@ const FiltersContainer = styled(Box, {
   alignItems: 'center',
   backgroundColor: accentColor,
   padding: isMobile ? '10px 6px' : '12px 134px',
-  borderBottom: '8px solid rgba(255,255,255,0.15)',
+  borderBottom: '8px solid wheat',
   margin: '50px auto',
   width: 'fit-content',
 }));
@@ -126,7 +125,7 @@ const Projects = () => {
 
   return (
     <Box>
-      <Box sx={{ px: isMobile ? 2 : 8, mt: '80px', mb: '30px' }}>
+      <Box sx={{ mt: '80px', mb: '30px' }}>
         <Typography
           variant="h1"
           sx={{
@@ -134,12 +133,16 @@ const Projects = () => {
             fontWeight: 700,
             textAlign: 'center',
             fontSize: isMobile ? '40px' : '60px',
-            mb: 1,
+            mb: 2,
           }}
         >
           {projectText.title}
         </Typography>
-        <SectionHeader title="" />
+        {/* Centered accent divider — dot + line */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 0 }}>
+          <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: theme.palette.custom.orangePalette.background }} />
+          <Box sx={{ width: 150, height: 2, backgroundColor: theme.palette.custom.orangePalette.background }} />
+        </Box>
       </Box>
 
       <FiltersContainer isMobile={isMobile} accentColor={theme.palette.custom.orangePalette.background}>
