@@ -42,7 +42,14 @@ declare module "@mui/material/styles" {
       base: {
         white: string;
         black: string;
-      }
+      };
+      splash: {
+        background: string;
+        orb1: string;
+        orb2: string;
+        orb3: string;
+        binaryColor: string;
+      };
     };
   }
 
@@ -85,6 +92,13 @@ declare module "@mui/material/styles" {
       base: {
         white: string;
         black: string;
+      };
+      splash?: {
+        background?: string;
+        orb1?: string;
+        orb2?: string;
+        orb3?: string;
+        binaryColor?: string;
       };
     };
   }

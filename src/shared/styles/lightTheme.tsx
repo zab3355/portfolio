@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 // color library https://mui.com/material-ui/customization/color/?srsltid=AfmBOooqZ813wULE56RblhoaJoTpCyxEpEMxOoA_5KlJAPqhS5d0JAeN
-import { orange, pink, grey, deepOrange } from "@mui/material/colors";
+import { orange, pink, grey, deepOrange, indigo, purple } from "@mui/material/colors";
 
 export const lightTheme = createTheme({
   palette: {
@@ -43,7 +43,14 @@ export const lightTheme = createTheme({
       base: {
         white: grey[50],
         black: grey[900],
-      }
+      },
+      splash: {
+        background: '#1a1a2e',
+        orb1: deepOrange[400],
+        orb2: indigo[700],
+        orb3: purple[700],
+        binaryColor: deepOrange[300],
+      },
     },
   },
   components: {
