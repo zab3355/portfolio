@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -8,6 +8,7 @@ const CustomCursor = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const isVisibleRef = useRef(false);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -22,7 +23,10 @@ const CustomCursor = () => {
     const onMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
     };
 
     const onEnterInteractive = () => setIsHovering(true);
@@ -43,7 +47,7 @@ const CustomCursor = () => {
         el.removeEventListener('mouseleave', onLeaveInteractive);
       });
     };
-  }, [isMobile, isVisible, mouseX, mouseY]);
+  }, [isMobile, mouseX, mouseY]);
 
   if (isMobile) return null;
 
