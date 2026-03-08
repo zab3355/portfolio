@@ -1,6 +1,6 @@
 import { Avatar, AvatarGroup, Box, Chip, Typography } from "@mui/material";
 import { BlogPostCardProps } from "../../shared/types/types";
-import { BlogAuthor } from "./blogTemplate";
+import { BlogAuthor } from "./BlogTemplate";
 import { getPreviewFromMarkdown } from "../../shared/config/markdownPreviewHelper";
 
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {

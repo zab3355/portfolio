@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { BlogDetailProps } from "../../shared/types/types";
-import BlogTemplate from "./blogTemplate";
+import BlogTemplate from "./BlogTemplate";
 import MarkdownRenderer from "../../shared/config/markdownRenderer";
 import CircleButton from "../../shared/components/circleButton";
 
