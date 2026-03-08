@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -143,8 +143,20 @@ const Projects = () => {
       </Box>
 
       <FiltersContainer isMobile={isMobile} accentColor={theme.palette.custom.orangePalette.background}>
-        <FilterButton selected={filter === 'Work'} onClick={() => setFilter('Work')}>Work</FilterButton>
-        <FilterButton selected={filter === 'Personal'} onClick={() => setFilter('Personal')}>Personal</FilterButton>
+        <FilterButton
+          selected={filter === 'Work'}
+          onClick={() => setFilter('Work')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFilter('Work'); }}
+          role="button"
+          tabIndex={0}
+        >Work</FilterButton>
+        <FilterButton
+          selected={filter === 'Personal'}
+          onClick={() => setFilter('Personal')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFilter('Personal'); }}
+          role="button"
+          tabIndex={0}
+        >Personal</FilterButton>
       </FiltersContainer>
 
       <BoxesContainer>

@@ -13,7 +13,6 @@ import { darkTheme } from './shared/styles/darkTheme';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 import { ThemeProviderWrapper } from './context/ThemeContext';
-import PersonalTemplate from './pages/personal/personalTemplate';
 import { mindexConstants, underConstructionConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
 import WorkTemplate from './pages/work/workTemplate';
 import CustomCursor from './shared/components/CustomCursor';
@@ -46,8 +45,6 @@ const App = () => {
               <Route path="/si" element={<WorkTemplate {...SiConstants} />} />
               <Route path="/theShore" element={<WorkTemplate {...theShoreConstants} />} />
               <Route path="/weatherWatcher" element={<WorkTemplate {...weatherWatcherConstants} />} />
-              <Route path="/theShore" element={<PersonalTemplate {...theShoreConstants} />} />
-              <Route path="/weatherWatcher" element={<PersonalTemplate {...weatherWatcherConstants} />} />
             </Route>
           </Routes>
         </BrowserRouter>

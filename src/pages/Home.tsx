@@ -140,7 +140,13 @@ const Home = () => {
         </ContentContainer>
 
         {/* Scroll indicator */}
-        <ScrollIndicator onClick={handleScroll} aria-label="Scroll to projects">
+        <ScrollIndicator
+          onClick={handleScroll}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleScroll(); }}
+          role="button"
+          tabIndex={0}
+          aria-label="Scroll to projects"
+        >
           <Box sx={{ width: '1px', height: '60px', backgroundColor: 'rgba(255,255,255,0.2)', position: 'relative', overflow: 'hidden' }}>
             <motion.div
               style={{
