@@ -1,26 +1,10 @@
 import { useState } from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import SectionHeader from '../../shared/components/sectionHeader';
-import bannerImage from '../../assets/images/banner.jpg';
-import { blogPosts, blogText } from '../../shared/constants/constants';
+import { blogPosts } from '../../shared/constants/constants';
 import BlogPostCard from './blogPostcard';
 import BlogDetail from './blogDetail';
-
-const SplashContainer = styled(Box)({
-  width: '100%',
-  height: '400px',
-  background: `url(${bannerImage})`,
-  backgroundAttachment: 'fixed',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  position: 'relative',
-  animation: 'fadeIn 2s',
-  '@keyframes fadeIn': {
-    '0%': { opacity: 0 },
-    '100%': { opacity: 1 },
-  },
-});
+import PageHeroBanner from '../../shared/components/PageHeroBanner';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -32,33 +16,18 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ImageText = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  fontSize: '50px',
-  marginTop: '320px',
-  marginLeft: '20px',
-  fontWeight: '700',
-  zIndex: '999',
-  color: theme.palette.custom.primary.light,
-  animation: 'fadeIn 2s',
-  '@keyframes fadeIn': {
-    '0%': { opacity: 0 },
-    '100%': { opacity: 1 },
-  },
-}));
-
-
 export default function Blog() {
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
   const blogPostsArray = [blogPosts];
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <ImageText>Blog</ImageText>
-      <SplashContainer />
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <PageHeroBanner
+        title="Blog"
+        filePath="pages/blog/blog.tsx"
+        subtitle="Read my latest posts"
+      />
       <StyledContainer>
-        <SectionHeader title={blogText.heading} />
-
         {selectedPost ? (
           <BlogDetail post={selectedPost} onBack={() => setSelectedPost(null)} />
         ) : (
@@ -73,4 +42,4 @@ export default function Blog() {
       </StyledContainer>
     </Box>
   );
-};
+}
