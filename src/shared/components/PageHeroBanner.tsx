@@ -57,7 +57,9 @@ const BannerContent = styled(Box)({
   zIndex: 2,
 });
 
-const BottomDivider = styled(Box)<{ accent: string }>(({ accent }) => ({
+const BottomDivider = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'accent',
+})<{ accent: string }>(({ accent }) => ({
   position: 'absolute',
   bottom: 0,
   left: 0,
