@@ -11,6 +11,7 @@ const mockProps = {
 };
 
 describe('MobileNavOverlay', () => {
+  beforeEach(() => { jest.clearAllMocks(); });
   it('renders nav links when open', () => {
     render(<MobileNavOverlay {...mockProps} />);
     NAV_ITEMS.forEach(({ label }) => {
