@@ -2,19 +2,34 @@ import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 
-const CanvasWrapper = styled(Box)({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  height: '55%',
-  zIndex: 1,
-  pointerEvents: 'none',
-  maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,1) 100%)',
-  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,1) 100%)',
-});
+interface BinaryRainProps {
+  variant?: 'default' | 'banner';
+}
 
-const BinaryRain = () => {
+const CanvasWrapper = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'variant',
+})<BinaryRainProps>(({ variant }) =>
+  variant === 'banner'
+    ? {
+        position: 'absolute',
+        inset: 0,
+        zIndex: 1,
+        pointerEvents: 'none',
+      }
+    : {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '55%',
+        zIndex: 1,
+        pointerEvents: 'none',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,1) 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,1) 100%)',
+      }
+);
+
+const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseColRef = useRef(-999);
   const theme = useTheme();
@@ -92,7 +107,7 @@ const BinaryRain = () => {
   }, [rainColor, accentColor]);
 
   return (
-    <CanvasWrapper>
+    <CanvasWrapper variant={variant}>
       <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
     </CanvasWrapper>
   );
