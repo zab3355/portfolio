@@ -8,3 +8,11 @@ import '@testing-library/jest-dom';
 const { TextEncoder, TextDecoder } = require('util');
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
+
+// IntersectionObserver is not available in jsdom — mock it so framer-motion
+// whileInView animations don't crash in tests
+global.IntersectionObserver = class IntersectionObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+} as any;

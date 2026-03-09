@@ -68,6 +68,8 @@ const SectionHeader = ({ title, codeLabel, sx }: SectionHeaderProps) => {
 
       <Box
         component={motion.div as any}
+        role="heading"
+        aria-label={title}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"

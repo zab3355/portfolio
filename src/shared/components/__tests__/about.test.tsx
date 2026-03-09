@@ -6,7 +6,8 @@ import { aboutText } from '../../constants/constants';
 describe('About', () => {
   it('renders the heading', () => {
     render(<About />);
-    expect(screen.getByText(aboutText.heading)).toBeInTheDocument();
+    // SectionHeader splits title into per-letter spans but has aria-label for accessibility
+    expect(screen.getByRole('heading', { name: aboutText.heading })).toBeInTheDocument();
   });
 
   it('renders the about image with correct alt text', () => {
