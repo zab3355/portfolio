@@ -19,18 +19,24 @@ interface OrbProps {
   duration: number;
 }
 
-const BannerContainer = styled(Box)({
+const BannerContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
-  height: '320px',
+  height: '380px',
   backgroundColor: '#07070f',
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  padding: '0 2rem',
-});
+  // Push content below the fixed Navbar (xs: 86px, sm: 96px)
+  paddingTop: '96px',
+  paddingLeft: '2rem',
+  paddingRight: '2rem',
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: '86px',
+  },
+}));
 
 const OrbElement = styled(Box, {
   shouldForwardProp: (prop) =>
