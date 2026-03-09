@@ -3,20 +3,14 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Tooltip,
-  Box,
   LinearProgress,
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
 import { Brightness4Outlined, Brightness7Outlined } from '@mui/icons-material';
+import AnimatedHamburger from './AnimatedHamburger';
+import MobileNavOverlay from './MobileNavOverlay';
 import { ReactComponent as Logo } from '../assets/icons/logo.svg';
 import { Link } from 'react-router-dom';
 import { NAV_ITEMS } from '../shared/config/navItems';
@@ -82,8 +76,6 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const selectedRoute = useRouteChange();
-
-  const toggleDrawer = (open: boolean) => () => setDrawerOpen(open);
 
   const handleScroll = () => {
     const scrollTop = window.scrollY;
@@ -181,73 +173,24 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
           )}
 
           {isMobile && (
-            <IconButton
-              onClick={toggleDrawer(true)}
-              aria-label="menu"
-              size="large"
-              sx={{
-                marginLeft: 'auto',
-                p: 1,
-                '& svg': {
-                  transition: 'transform .25s ease',
-                  transform: drawerOpen ? 'rotate(90deg) scale(1.05)' : 'none',
-                },
-              }}
-            >
-              {drawerOpen ? <CloseIcon /> : <MenuIcon />}
-            </IconButton>
+            <AnimatedHamburger
+              open={drawerOpen}
+              onClick={() => setDrawerOpen((prev) => !prev)}
+              color={theme.palette.text.primary}
+            />
           )}
         </Toolbar>
       </AppBarContainer>
 
       {!isMobile && <ProgressBar variant="determinate" value={progress} />}
 
-      {/* DRAWER */}
-      <Drawer
-        anchor="top"
+      <MobileNavOverlay
         open={drawerOpen}
-        onClose={toggleDrawer(false)}
-        ModalProps={{ keepMounted: true }}
-        PaperProps={{
-          sx: {
-            backgroundColor: theme.palette.custom.navbar.mobileBackground,
-            color: theme.palette.custom.base.white,
-          },
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1.5 }}>
-          <LogoButton />
-          <IconButton
-            onClick={toggleDrawer(false)}
-            sx={{
-              ml: 'auto',
-              '& svg': {
-                transition: 'transform .3s ease',
-              },
-              '&:hover svg': {
-                transform: 'rotate(90deg) scale(1.05)',
-              },
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-
-        <List>
-          {NAV_ITEMS.map(({ path, label }) => (
-            <ListItem key={path} disablePadding>
-              <ListItemButton
-                component={Link}
-                to={path}
-                selected={selectedRoute === path}
-                onClick={toggleDrawer(false)}
-              >
-                <ListItemText primary={label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+        onClose={() => setDrawerOpen(false)}
+        onThemeChange={onThemeChange}
+        isDarkMode={isDarkMode}
+        selectedRoute={selectedRoute}
+      />
 
       <ScrollToTopButton show={showScroll} onClick={scrollToTop} />
     </>
