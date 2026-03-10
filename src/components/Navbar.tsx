@@ -22,6 +22,9 @@ const AppBarContainer = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'scrolled',
 })<{ scrolled: boolean }>(({ theme, scrolled }) => ({
   position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
   width: '100%',
   transition: 'background-color 0.3s, transform 0.3s, opacity 0.3s',
   background:
@@ -61,6 +64,11 @@ const ProgressBar = styled(LinearProgress)(({ theme }) => ({
 const LogoButton = styled(Logo)(({ theme }) => ({
   height: 60,
   width: 'fit-content',
+  cursor: 'pointer',
+  transition: 'transform 0.2s ease',
+  '&:hover': {
+    transform: 'scale(1.07)',
+  },
   ...(theme.palette.mode === 'dark' && {
     filter:
       'invert(102%) sepia(93%) saturate(0%) hue-rotate(87deg) brightness(119%) contrast(119%)',
@@ -105,7 +113,9 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
             px: { xs: 2, sm: 3 },
           }}
         >
-          <LogoButton />
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <LogoButton />
+          </Link>
 
           {!isMobile && (
             <NavLinks>
@@ -119,6 +129,11 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
                       sx: {
                         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111',
                         color: theme.palette.mode === 'dark' ? '#111' : '#fff',
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: theme.palette.mode === 'dark' ? '#fff' : '#111',
                       },
                     },
                   }}
@@ -149,6 +164,11 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
                     sx: {
                       backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111',
                       color: theme.palette.mode === 'dark' ? '#111' : '#fff',
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: theme.palette.mode === 'dark' ? '#fff' : '#111',
                     },
                   },
                 }}
@@ -182,7 +202,7 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
         </Toolbar>
       </AppBarContainer>
 
-      {!isMobile && <ProgressBar variant="determinate" value={progress} />}
+      <ProgressBar variant="determinate" value={progress} />
 
       <MobileNavOverlay
         open={drawerOpen}

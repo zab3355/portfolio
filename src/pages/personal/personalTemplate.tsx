@@ -1,7 +1,9 @@
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { styled, useMediaQuery, useTheme } from '@mui/system';
-import bannerImage from '../../assets/images/banner.jpg';
 import ReactPlayer from 'react-player';
+import PageHeroBanner from '../../shared/components/PageHeroBanner';
+import SectionHeader from '../../shared/components/sectionHeader';
+
 interface PersonalTemplateProps {
   title: string;
   title2: string;
@@ -13,6 +15,7 @@ interface PersonalTemplateProps {
   titleSection3?: string;
   descriptionSection3?: string[];
 }
+
 const AnimationContainer = styled(Box)({
   animation: 'fadeIn 1s',
   "@keyframes fadeIn": {
@@ -21,63 +24,17 @@ const AnimationContainer = styled(Box)({
   }
 });
 
-const SplashContainer = styled(Box)({
-  width: '100%',
-  height: '400px',
-  background: `url(${bannerImage})`,
-  backgroundAttachment: 'fixed',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  position: 'relative',
-  filter: 'blur(3px)',
-});
-
-const ImageText = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  fontSize: '50px',
-  marginTop: '320px',
-  marginLeft: '20px',
-  fontWeight: '700',
-  zIndex: '999',
-  color: theme.palette.custom.base.white,
-  animation: 'fadeIn 2s',
-  "@keyframes fadeIn": {
-    "0%": { opacity: 0 },
-    "100%": { opacity: 1 }
-  }
-}));
-const ImageMobileText = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  fontSize: '50px',
-  marginTop: '256px',
-  marginLeft: '20px',
-  fontWeight: '700',
-  zIndex: '999',
-  color: theme.palette.custom.base.white,
-  animation: 'fadeIn 2s',
-  "@keyframes fadeIn": {
-    "0%": { opacity: 0 },
-    "100%": { opacity: 1 }
-  }
-}));
-
 const Section = styled(Box)({
   display: 'flex',
   justifyContent: 'space-between',
   width: '94%',
   margin: '4rem'
 });
+
 const SectionMobile = styled(Box)({
   display: 'block',
   justifyContent: 'space-between',
   width: 'auto',
-});
-
-const TitleContainer = styled(Typography)({
-  fontFamily: 'Poppins',
-  fontWeight: '700',
-  fontSize: '24px',
-  margin: '1rem',
 });
 
 const DescriptionContainer = styled(Typography)({
@@ -86,6 +43,7 @@ const DescriptionContainer = styled(Typography)({
   marginBottom: '1rem',
   margin: '1rem',
 });
+
 const ListContainer = styled(Typography)({
   fontFamily: 'Poppins',
   fontSize: '16px',
@@ -107,26 +65,28 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
   const expandImage = (image?: string) => {
     window.open(image, '_blank');
   }
+
   return (
     <AnimationContainer>
+      <PageHeroBanner
+        title={title}
+        filePath={`pages/personal/${title.toLowerCase().replace(/\s+/g, '-')}.tsx`}
+        subtitle={title2}
+      />
       {!isMobile ? (
         <Box>
-          <ImageText>{title}</ImageText>
-          <SplashContainer />
           <Section>
             <ImageContainer>
               {!videoHeaderUrl ? (
-                <img src={images[0]} onClick={() => { expandImage(images[0]) }} alt={`${title} ${images[0]}`} style={{ width: '100%', height: 'auto' }} />
+                images[0] ? (
+                  <img src={images[0]} onClick={() => { expandImage(images[0]) }} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                ) : null
               ) : (
-                <ReactPlayer
-                  url={videoHeaderUrl}>
-                </ReactPlayer>
+                <ReactPlayer url={videoHeaderUrl} />
               )}
             </ImageContainer>
             <TextContainer>
-              <TitleContainer>
-                {title2}
-              </TitleContainer>
+              <SectionHeader title={title2} />
               <List sx={{ pl: 4, listStyleType: 'disc' }}>
                 {description.map((item, idx) => (
                   <ListItem key={idx} sx={{ display: "list-item", pl: 2 }}>
@@ -136,59 +96,49 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
               </List>
             </TextContainer>
           </Section>
-          <Section>
-            <TextContainer>
-              <TitleContainer>
-                {titleSection2}
-              </TitleContainer>
-              <DescriptionContainer>
-                {descriptionSection2}
-              </DescriptionContainer>
-            </TextContainer>
-            <ImageContainer>
-              <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} ${images[1]}`} style={{ width: '100%', height: 'auto' }} />
-            </ImageContainer>
-          </Section>
 
-          <Section>
-            <TextContainer>
-              {title[2].length > 0 ? (
-                <TitleContainer>
-                  {titleSection3}
-                </TitleContainer>
-              ) : null}
-              {description[2].length > 0 ? (
-                <DescriptionContainer>
-                  {descriptionSection3}
-                </DescriptionContainer>
-              ) :
-                null}
-              {images[2] !== null ? (
+          {(titleSection2 || descriptionSection2) && (
+            <Section>
+              <TextContainer>
+                {titleSection2 && <SectionHeader title={titleSection2} />}
+                <DescriptionContainer>{descriptionSection2}</DescriptionContainer>
+              </TextContainer>
+              {images[1] ? (
                 <ImageContainer>
-                  <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} ${images[2]}`} style={{ width: '100%', height: 'auto' }} />
+                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
                 </ImageContainer>
               ) : null}
+            </Section>
+          )}
 
-            </TextContainer>
-          </Section>
-        </Box>) : (
+          {(titleSection3 || descriptionSection3) && (
+            <Section>
+              <TextContainer>
+                {titleSection3 && <SectionHeader title={titleSection3} />}
+                <DescriptionContainer>{descriptionSection3}</DescriptionContainer>
+                {images[2] ? (
+                  <ImageContainer>
+                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                  </ImageContainer>
+                ) : null}
+              </TextContainer>
+            </Section>
+          )}
+        </Box>
+      ) : (
         <Box>
           <SectionMobile>
-            <ImageMobileText>{title}</ImageMobileText>
-            <SplashContainer />
             <ImageContainer>
               {!videoHeaderUrl ? (
-                <img src={images[0]} onClick={() => expandImage(images[0])} alt={`${title} ${images[0]}`} style={{ width: '100%', height: 'auto' }} />
+                images[0] ? (
+                  <img src={images[0]} onClick={() => expandImage(images[0])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                ) : null
               ) : (
-                <ReactPlayer width='100%' height='auto'
-                  url={videoHeaderUrl}>
-                </ReactPlayer>
+                <ReactPlayer width='100%' height='auto' url={videoHeaderUrl} />
               )}
             </ImageContainer>
             <TextContainer>
-              <TitleContainer>
-                {title2}
-              </TitleContainer>
+              <SectionHeader title={title2} />
               <List sx={{ pl: 4, listStyleType: 'disc' }}>
                 {description.map((item, idx) => (
                   <ListItem key={idx} sx={{ display: "list-item", pl: 2 }}>
@@ -198,44 +148,37 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
               </List>
             </TextContainer>
           </SectionMobile>
-          <SectionMobile>
-            <TextContainer>
-              <TitleContainer>
-                {titleSection2}
-              </TitleContainer>
-              <DescriptionContainer>
-                {descriptionSection2}
-              </DescriptionContainer>
-            </TextContainer>
-            <ImageContainer>
-              <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} more`} style={{ width: '100%', height: 'auto' }} />
-            </ImageContainer>
-          </SectionMobile>
-          <SectionMobile>
-            <TextContainer>
-              {title[2].length > 0 ? (
-                <TitleContainer>
-                  {titleSection3}
-                </TitleContainer>
-              ) : null}
-              {description[2].length > 0 ? (
-                <DescriptionContainer>
-                  {descriptionSection3}
-                </DescriptionContainer>
-              ) :
-                null}
-              {images[2] !== null ? (
-                <ImageContainer>
-                  <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} ${images[2]}`} style={{ width: '100%', height: 'auto' }} />
-                </ImageContainer>
-              ) : null}
-            </TextContainer>
-          </SectionMobile>
-        </Box>
-      )
-      }
-    </AnimationContainer >
 
+          {titleSection2 && descriptionSection2 ? (
+            <SectionMobile>
+              <TextContainer>
+                <SectionHeader title={titleSection2} />
+                <DescriptionContainer>{descriptionSection2}</DescriptionContainer>
+              </TextContainer>
+              {images[1] && (
+                <ImageContainer>
+                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} more`} style={{ width: '100%', height: 'auto' }} />
+                </ImageContainer>
+              )}
+            </SectionMobile>
+          ) : null}
+
+          {titleSection3 && descriptionSection3 ? (
+            <SectionMobile>
+              <TextContainer>
+                <SectionHeader title={titleSection3} />
+                <DescriptionContainer>{descriptionSection3}</DescriptionContainer>
+                {images[2] && (
+                  <ImageContainer>
+                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                  </ImageContainer>
+                )}
+              </TextContainer>
+            </SectionMobile>
+          ) : null}
+        </Box>
+      )}
+    </AnimationContainer>
   );
 };
 

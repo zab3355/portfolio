@@ -1,4 +1,6 @@
 import reactCompilerImage from '../assets/images/blog/reactcompiler1.png';
+import bannerImage from '../assets/images/banner.jpg';
+import skiingImage from '../assets/images/skiing.png';
 import { BlogPost } from '../shared/types/types';
 
 const blogPosts: BlogPost[] = [
@@ -14,8 +16,42 @@ const blogPosts: BlogPost[] = [
     media: [
       {
         type: 'image',
-        src: '/static/images/blog/react-compiler-overview.jpg',
+        src: reactCompilerImage,
         alt: 'React Compiler Overview',
+      },
+    ],
+  },
+  {
+    img: bannerImage,
+    tag: 'Leadership',
+    title: 'Engineering Leadership: The Shift from Writing Code to Leading Systems',
+    description:
+      'Making the transition from individual contributor to technical lead is one of the most significant inflection points in a software engineering career. Here is what I wish I knew earlier.',
+    markdownPath: '/blog/engineering-leadership.md',
+    authors: [{ name: 'Zach Brown', avatar: '/static/images/avatar/1.jpg' }],
+    date: 'March 9 2026',
+    media: [
+      {
+        type: 'image',
+        src: bannerImage,
+        alt: 'Engineering leadership',
+      },
+    ],
+  },
+  {
+    img: skiingImage,
+    tag: 'Photography',
+    title: 'GoPro Ski Season Compilation',
+    description:
+      'Some of my favorite shots from this ski season',
+    markdownPath: '/blog/gopro-ski-season.md',
+    authors: [{ name: 'Zach Brown', avatar: '/static/images/avatar/1.jpg' }],
+    date: 'March 10 2026',
+    media: [
+      {
+        type: 'image',
+        src: skiingImage,
+        alt: 'GoPro Ski Season Compilation',
       },
     ],
   },

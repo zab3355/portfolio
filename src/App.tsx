@@ -13,8 +13,10 @@ import { darkTheme } from './shared/styles/darkTheme';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { ThemeProviderWrapper } from './context/ThemeContext';
-import { mindexConstants, underConstructionConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
+import { mindexConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
 import WorkTemplate from './pages/work/workTemplate';
+import ProjectTemplate from './pages/work/ProjectTemplate';
+import { miseData, nbcUniversalData } from './data/projectData';
 import CustomCursor from './shared/components/CustomCursor';
 
 const App = () => {
@@ -37,7 +39,7 @@ const App = () => {
               <Route path="portfolio" element={<Portfolio />} />
               <Route path="blog" element={<Blog />} />
               <Route path="contact" element={<Contact />} />
-              <Route path="/nbcUniversal" element={<WorkTemplate {...underConstructionConstants} />} />
+              <Route path="/nbcUniversal" element={<ProjectTemplate {...nbcUniversalData} />} />
               <Route path="/mindex" element={<WorkTemplate {...mindexConstants} />} />
               <Route path="/sandboxUnion" element={<WorkTemplate {...sandboxUnionConstants} />} />
               <Route path="/wegmans" element={<WorkTemplate {...wegmansConstants} />} />
@@ -45,6 +47,7 @@ const App = () => {
               <Route path="/si" element={<WorkTemplate {...SiConstants} />} />
               <Route path="/theShore" element={<WorkTemplate {...theShoreConstants} />} />
               <Route path="/weatherWatcher" element={<WorkTemplate {...weatherWatcherConstants} />} />
+              <Route path="/mise" element={<ProjectTemplate {...miseData} />} />
             </Route>
           </Routes>
         </BrowserRouter>

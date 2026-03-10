@@ -30,7 +30,7 @@ const About = () => {
   return (
     <ContentContainer>
       <ImageContainer>
-        <img src={aboutImage} alt="Photo of Zach Brown" style={{ width: '100%', borderRadius: '8px' }} />
+        <img src={aboutImage} alt="Zach Brown" style={{ width: '100%', borderRadius: '8px' }} />
       </ImageContainer>
       <TextContainer>
         <SectionHeader title={aboutText.heading} />

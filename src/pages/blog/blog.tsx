@@ -25,7 +25,6 @@ export default function Blog() {
       <PageHeroBanner
         title="Blog"
         filePath="pages/blog/blog.tsx"
-        subtitle="Read my latest posts"
       />
       <StyledContainer>
         {selectedPost ? (

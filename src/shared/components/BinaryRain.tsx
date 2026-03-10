@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 interface BinaryRainProps {
   variant?: 'default' | 'banner';
@@ -33,6 +34,7 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseColRef = useRef(-999);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const rainColor = theme.palette.custom.splash.binaryColor;
   const accentColor = theme.palette.custom.orangePalette.background;
 
@@ -92,7 +94,7 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
       mouseColRef.current = -999;
     };
 
-    const interval = setInterval(draw, 60);
+    const interval = setInterval(draw, isMobile ? 100 : 60);
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(canvas);
     window.addEventListener('mousemove', onMouseMove);
@@ -104,7 +106,7 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseleave', onMouseLeave);
     };
-  }, [rainColor, accentColor]);
+  }, [rainColor, accentColor, isMobile]);
 
   return (
     <CanvasWrapper variant={variant}>

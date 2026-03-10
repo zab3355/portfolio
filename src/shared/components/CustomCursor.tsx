@@ -1,26 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useVelocity, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-const SPRING_CONFIG = { stiffness: 180, damping: 22 };
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  angle: number;
+  distance: number;
+  size: number;
+}
 
 const CustomCursor = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [particles, setParticles] = useState<Particle[]>([]);
   const isVisibleRef = useRef(false);
+  const particleIdRef = useRef(0);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Main ring — spring lagged behind cursor
-  const ringX = useSpring(mouseX, SPRING_CONFIG);
-  const ringY = useSpring(mouseY, SPRING_CONFIG);
-
-  // Comet trail — 4 springs at decreasing stiffness, each follows mouse directly.
-  // When moving fast they spread out behind cursor; when still they converge to a point.
+  // Comet trail — 4 springs at decreasing stiffness
   const t1x = useSpring(mouseX, { stiffness: 140, damping: 22 });
   const t1y = useSpring(mouseY, { stiffness: 140, damping: 22 });
   const t2x = useSpring(mouseX, { stiffness: 90, damping: 20 });
@@ -29,24 +33,6 @@ const CustomCursor = () => {
   const t3y = useSpring(mouseY, { stiffness: 55, damping: 18 });
   const t4x = useSpring(mouseX, { stiffness: 30, damping: 15 });
   const t4y = useSpring(mouseY, { stiffness: 30, damping: 15 });
-
-  // Velocity-based ring stretch — ring stretches in direction of travel
-  const velX = useVelocity(ringX);
-  const velY = useVelocity(ringY);
-
-  const ringScaleX = useTransform(
-    [velX, velY] as any,
-    ([vx, vy]: number[]) => Math.min(2.2, 1 + Math.sqrt(vx * vx + vy * vy) * 0.0012)
-  );
-  const ringScaleY = useTransform(
-    [velX, velY] as any,
-    ([vx, vy]: number[]) => Math.max(0.55, 1 - Math.sqrt(vx * vx + vy * vy) * 0.0007)
-  );
-  const ringRotate = useTransform(
-    [velX, velY] as any,
-    ([vx, vy]: number[]) =>
-      Math.abs(vx) + Math.abs(vy) > 15 ? (Math.atan2(vy, vx) * 180) / Math.PI : 0
-  );
 
   useEffect(() => {
     if (isMobile) return;
@@ -60,25 +46,29 @@ const CustomCursor = () => {
       }
     };
 
-    const onEnterInteractive = (e: MouseEvent) => {
-      const target = e.target as Element;
-      if (target.closest('a, button, [role="button"]')) setIsHovering(true);
-    };
-    const onLeaveInteractive = (e: MouseEvent) => {
-      const relatedTarget = e.relatedTarget as Element | null;
-      if (!relatedTarget || !relatedTarget.closest('a, button, [role="button"]')) {
-        setIsHovering(false);
-      }
+    const onClick = (e: MouseEvent) => {
+      const count = 10;
+      const newParticles: Particle[] = Array.from({ length: count }, (_, i) => ({
+        id: particleIdRef.current++,
+        x: e.clientX,
+        y: e.clientY,
+        angle: (i / count) * 360 + Math.random() * 20,
+        distance: 28 + Math.random() * 36,
+        size: 4 + Math.random() * 4,
+      }));
+      setParticles(p => [...p, ...newParticles]);
+      const ids = new Set(newParticles.map(p => p.id));
+      setTimeout(() => {
+        setParticles(p => p.filter(pt => !ids.has(pt.id)));
+      }, 650);
     };
 
     window.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseover', onEnterInteractive);
-    document.addEventListener('mouseout', onLeaveInteractive);
+    window.addEventListener('click', onClick);
 
     return () => {
       window.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseover', onEnterInteractive);
-      document.removeEventListener('mouseout', onLeaveInteractive);
+      window.removeEventListener('click', onClick);
     };
   }, [isMobile, mouseX, mouseY]);
 
@@ -95,7 +85,7 @@ const CustomCursor = () => {
 
   return (
     <>
-      {/* Comet tail — springs with decreasing stiffness fan out behind cursor when moving */}
+      {/* Comet tail */}
       {trailPoints.map((t, i) => (
         <motion.div
           key={i}
@@ -118,7 +108,7 @@ const CustomCursor = () => {
         />
       ))}
 
-      {/* Dot — snaps to cursor position exactly */}
+      {/* Main dot — snaps to cursor */}
       <motion.div
         style={{
           position: 'fixed',
@@ -128,40 +118,45 @@ const CustomCursor = () => {
           y: mouseY,
           translateX: '-50%',
           translateY: '-50%',
-          width: 8,
-          height: 8,
+          width: 9,
+          height: 9,
           borderRadius: '50%',
           backgroundColor: accent,
           pointerEvents: 'none',
           zIndex: 99999,
           opacity: isVisible ? 1 : 0,
+          boxShadow: `0 0 8px 2px ${accent}88`,
         }}
       />
 
-      {/* Ring — spring lagged, stretches in direction of travel */}
-      <motion.div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          x: ringX,
-          y: ringY,
-          translateX: '-50%',
-          translateY: '-50%',
-          width: isHovering ? 20 : 34,
-          height: isHovering ? 20 : 34,
-          borderRadius: '50%',
-          border: `2px solid ${accent}`,
-          backgroundColor: isHovering ? `${accent}33` : 'transparent',
-          pointerEvents: 'none',
-          zIndex: 99998,
-          opacity: isVisible ? 1 : 0,
-          scaleX: isHovering ? 1 : ringScaleX,
-          scaleY: isHovering ? 1 : ringScaleY,
-          rotate: isHovering ? 0 : ringRotate,
-          transition: 'width 0.2s ease, height 0.2s ease, background-color 0.2s ease',
-        }}
-      />
+      {/* Click particle burst */}
+      <AnimatePresence>
+        {particles.map(p => {
+          const rad = (p.angle * Math.PI) / 180;
+          const tx = Math.cos(rad) * p.distance;
+          const ty = Math.sin(rad) * p.distance;
+          return (
+            <motion.div
+              key={p.id}
+              initial={{ x: p.x, y: p.y, opacity: 1, scale: 1, translateX: '-50%', translateY: '-50%' }}
+              animate={{ x: p.x + tx, y: p.y + ty, opacity: 0, scale: 0, translateX: '-50%', translateY: '-50%' }}
+              transition={{ duration: 0.55, ease: 'easeOut' }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: p.size,
+                height: p.size,
+                borderRadius: '50%',
+                backgroundColor: accent,
+                pointerEvents: 'none',
+                zIndex: 99997,
+                boxShadow: `0 0 6px 1px ${accent}99`,
+              }}
+            />
+          );
+        })}
+      </AnimatePresence>
     </>
   );
 };

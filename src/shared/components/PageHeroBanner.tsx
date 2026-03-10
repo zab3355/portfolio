@@ -164,6 +164,7 @@ const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
             fontSize: { xs: '38px', sm: '52px' },
             margin: 0,
             lineHeight: 1.1,
+            paddingBottom: '0.15em',
             display: 'inline-flex',
             flexWrap: 'wrap',
             background: `linear-gradient(135deg, #ffffff 30%, ${accent} 60%, #ffffff 90%)`,

@@ -25,6 +25,7 @@ import wegmansImage from '../../assets/images/wegmans.jpg';
 import osmoseImage from '../../assets/images/osmose.jpg';
 import siImage from '../../assets/images/si.jpg';
 import constructionImage from '../../assets/images/construction.png';
+import miseBannerSvg from '../../assets/images/mise-banner.svg';
 import osmose1 from '../../assets/images/projects/osmose1.png';
 import osmose2 from '../../assets/images/projects/osmose2.jpg';
 import osmose3 from '../../assets/images/projects/osmose3.png';
@@ -74,14 +75,15 @@ export const blogText = {
 }
 
 export const projectBoxes = [
-  { id: 1, type: 'Work', content: 'NBCUniversal', imageUrl: nbcUniImage, link: '/nbcuniversal' },
+  { id: 1, type: 'Work', content: 'NBCUniversal', imageUrl: nbcUniImage, link: '/nbcUniversal' },
   { id: 2, type: 'Work', content: 'Mindex', imageUrl: mindexImage, link: '/mindex' },
   { id: 3, type: 'Work', content: 'Sandbox Union', imageUrl: sandboxUnionImage, link: '/sandboxUnion' },
   { id: 4, type: 'Work', content: 'Wegmans', imageUrl: wegmansImage, link: '/wegmans' },
   { id: 5, type: 'Work', content: 'Osmose', imageUrl: osmoseImage, link: '/osmose' },
-  { id: 6, type: 'Work', content: 'Supplemental Instruction', imageUrl: siImage, link: '/si', },
-  { id: 7, type: 'Personal', content: 'The Shore', imageUrl: theShoreImage, link: '/theShore' },
-  { id: 8, type: 'Personal', content: 'Weather Watcher', imageUrl: weatherWatcherImage, link: '/weatherWatcher' },
+  { id: 6, type: 'Work', content: 'Supplemental Instruction', imageUrl: siImage, link: '/si' },
+  { id: 7, type: 'Personal', content: 'Mise', imageUrl: miseBannerSvg, link: '/mise' },
+  { id: 9, type: 'Personal', content: 'The Shore', imageUrl: theShoreImage, link: '/theShore' },
+  { id: 10, type: 'Personal', content: 'Weather Watcher', imageUrl: weatherWatcherImage, link: '/weatherWatcher' },
 ];
 
 export const underConstructionConstants = {

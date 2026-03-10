@@ -100,18 +100,23 @@ const FilterImage = styled('img')(({ theme }) => ({
     backgroundPosition: '0px 0px',
     backgroundSize: 'calc(100% - var(--offset)) calc(100% - var(--offset))',
   },
+  [theme.breakpoints.down('sm')]: {
+    width: '90%',
+  },
 } as any));
 
 const FilterButton = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'selected',
 })<{ selected: boolean }>(({ theme, selected }) => ({
-  color: selected ? theme.palette.custom.base.black : theme.palette.custom.base.white,
+  color: theme.palette.custom.base.white,
   textTransform: 'uppercase',
   margin: '0 50px',
   cursor: 'pointer',
   fontWeight: selected ? 600 : 400,
+  opacity: selected ? 1 : 0.75,
+  transition: 'opacity 0.15s ease',
   '&:hover, &:focus': {
-    fontWeight: 500,
+    opacity: 1,
   },
 }));
 
@@ -132,15 +137,14 @@ const Projects = () => {
             fontFamily: 'Poppins',
             fontWeight: 700,
             textAlign: 'center',
-            fontSize: isMobile ? '40px' : '60px',
-            mb: 2,
+            fontSize: isMobile ? '30px' : '60px',
+            mb: 0.5,
           }}
         >
           {projectText.title}
         </Typography>
-        {/* Centered accent divider — dot + line */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 0 }}>
-          <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: theme.palette.custom.orangePalette.background }} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 2,mb: 0 }}>
+          <Box sx={{ width: 12, height: 12, position: 'absolute', borderRadius: '50%', backgroundColor: theme.palette.custom.orangePalette.background }} />
           <Box sx={{ width: 150, height: 2, backgroundColor: theme.palette.custom.orangePalette.background }} />
         </Box>
       </Box>

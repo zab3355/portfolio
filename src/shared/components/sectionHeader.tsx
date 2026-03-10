@@ -8,13 +8,11 @@ interface SectionHeaderProps {
   sx?: object;
 }
 
-const AccentWrapper = styled(Box)(({ theme }) => ({
+const AccentWrapper = styled(Box)({
   display: 'flex',
   alignItems: 'center',
-  gap: 8,
-  paddingLeft: theme.spacing(1),
-  marginTop: 8,
-}));
+  marginTop: 12,
+});
 
 const AccentDot = styled(Box)(({ theme }) => ({
   width: 12,
@@ -25,7 +23,7 @@ const AccentDot = styled(Box)(({ theme }) => ({
 }));
 
 const AccentLine = styled(Box)(({ theme }) => ({
-  width: 150,
+  width: 160,
   height: 2,
   backgroundColor: theme.palette.custom.orangePalette.background,
 }));
@@ -77,8 +75,10 @@ const SectionHeader = ({ title, codeLabel, sx }: SectionHeaderProps) => {
         sx={{
           fontFamily: 'Poppins',
           fontWeight: 700,
-          fontSize: '42px',
-          display: 'inline-flex',
+          fontSize: { xs: '28px', sm: '42px' },
+          lineHeight: 1,
+          display: 'flex',
+          width: 'fit-content',
           flexWrap: 'wrap',
           background: `linear-gradient(135deg, ${theme.palette.text.primary} 40%, ${accent} 65%, ${theme.palette.text.primary} 90%)`,
           backgroundClip: 'text',

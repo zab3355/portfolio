@@ -49,8 +49,8 @@ const ScrollIndicator = styled(Box)({
 });
 
 const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.045 } },
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.4, staggerChildren: 0.045 } },
 };
 
 const letterVariants = {
@@ -65,13 +65,14 @@ const Home = () => {
 
   const [scrollHovered, setScrollHovered] = useState(false);
 
+  const navbarHeight = isMobile ? 86 : 96;
   const handleScroll = useCallback(() => {
-    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-  }, []);
+    window.scrollTo({ top: window.innerHeight - navbarHeight, behavior: 'smooth' });
+  }, [navbarHeight]);
 
   const nameLetters = useMemo(() => splashText.title.split(''), []);
 
-  const headingSize = isMobile ? '42px' : '75px';
+  const headingSize = isMobile ? '32px' : '75px';
   const typewriterSize = isMobile ? '22px' : '28px';
 
   return (
@@ -94,7 +95,8 @@ const Home = () => {
               fontSize: headingSize,
               margin: 0,
               lineHeight: 1.1,
-              display: 'inline-flex',
+              display: 'flex',
+              width: '100%',
               flexWrap: 'wrap',
               justifyContent: 'center',
               background: `linear-gradient(135deg, #ffffff 30%, ${accent} 60%, #ffffff 90%)`,
