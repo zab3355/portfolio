@@ -27,20 +27,24 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
   const accent = theme.palette.custom.orangePalette.background;
 
   const heroMedia = media[0];
+  const allYoutube = media.length > 0 && media.every(m => m.type === 'youtube');
 
   return (
     <Box>
+      {/* Side-by-side YouTube players (when all media are YouTube) */}
+      {allYoutube && (
+        <Box sx={{ display: 'flex', gap: 2, mb: 3, flexDirection: { xs: 'column', sm: 'row' } }}>
+          {media.map((item, idx) => (
+            <Box key={idx} sx={{ flex: 1, borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
+              <ReactPlayer url={item.src} width="100%" height="100%" controls />
+            </Box>
+          ))}
+        </Box>
+      )}
+
       {/* Hero image */}
-      {heroMedia && heroMedia.type === 'image' && (
-        <Box
-          sx={{
-            width: '100%',
-            maxHeight: 420,
-            overflow: 'hidden',
-            borderRadius: 2,
-            mb: 3,
-          }}
-        >
+      {!allYoutube && heroMedia && heroMedia.type === 'image' && (
+        <Box sx={{ width: '100%', maxHeight: 420, overflow: 'hidden', borderRadius: 2, mb: 3 }}>
           <img
             src={heroMedia.src}
             alt={heroMedia.alt || title}
@@ -48,12 +52,12 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           />
         </Box>
       )}
-      {heroMedia && heroMedia.type === 'video' && (
+      {!allYoutube && heroMedia && heroMedia.type === 'video' && (
         <Box sx={{ width: '100%', borderRadius: 2, overflow: 'hidden', mb: 3 }}>
           <video src={heroMedia.src} controls style={{ width: '100%', display: 'block' }} />
         </Box>
       )}
-      {heroMedia && heroMedia.type === 'youtube' && (
+      {!allYoutube && heroMedia && heroMedia.type === 'youtube' && (
         <Box sx={{ width: '100%', borderRadius: 2, overflow: 'hidden', mb: 3, aspectRatio: '16/9' }}>
           <ReactPlayer url={heroMedia.src} width="100%" height="100%" controls />
         </Box>
@@ -92,8 +96,8 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           <Typography variant="caption" color="text.secondary">{date}</Typography>
         </Box>
 
-        {/* Additional media */}
-        {media.slice(1).length > 0 && (
+        {/* Additional media (non-YouTube-only posts) */}
+        {!allYoutube && media.slice(1).length > 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
             {media.slice(1).map((item, idx) =>
               item.type === 'image' ? (
