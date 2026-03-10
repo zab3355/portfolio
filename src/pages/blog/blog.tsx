@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { blogPosts } from '../../shared/constants/constants';
+import blogPosts from '../../data/blogPosts';
 import BlogPostCard from './blogPostcard';
 import BlogDetail from './blogDetail';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
+import { BlogPost } from '../../shared/types/types';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -17,8 +18,7 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export default function Blog() {
-  const [selectedPost, setSelectedPost] = useState<any | null>(null);
-  const blogPostsArray = [blogPosts];
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -32,7 +32,7 @@ export default function Blog() {
           <BlogDetail post={selectedPost} onBack={() => setSelectedPost(null)} />
         ) : (
           <Grid container spacing={2}>
-            {blogPostsArray.map((post, idx) => (
+            {blogPosts.map((post, idx) => (
               <Grid item xs={12} sm={6} md={4} key={idx}>
                 <BlogPostCard post={post} onClick={() => setSelectedPost(post)} />
               </Grid>

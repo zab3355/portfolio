@@ -38,12 +38,34 @@ export type MarkdownRendererProps =
   | { src: string; content?: never }
   | { src?: never; content: string };
 
+export interface BlogAuthor {
+  name: string;
+  avatar: string;
+}
+
+export interface BlogMedia {
+  type: 'image' | 'video';
+  src: string;
+  alt?: string;
+}
+
+export interface BlogPost {
+  img: string;
+  tag: string;
+  title: string;
+  description: string;
+  markdownPath: string;
+  authors: BlogAuthor[];
+  date: string;
+  media?: BlogMedia[];
+}
+
 export interface BlogDetailProps {
-  post: any;
+  post: BlogPost;
   onBack: () => void;
 }
 
 export interface BlogPostCardProps {
-  post: any;
+  post: BlogPost;
   onClick: () => void;
 }

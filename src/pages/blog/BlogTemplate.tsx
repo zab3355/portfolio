@@ -1,17 +1,9 @@
 import * as React from 'react';
 import { Box, Avatar, Chip, Typography } from '@mui/material';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
+import { BlogAuthor, BlogMedia } from '../../shared/types/types';
 
-export interface BlogMedia {
-  type: 'image' | 'video';
-  src: string;
-  alt?: string;
-}
-
-export interface BlogAuthor {
-  name: string;
-  avatar: string;
-}
+export type { BlogAuthor, BlogMedia };
 
 export interface BlogTemplateProps {
   title: string;
