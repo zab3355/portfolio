@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box, Avatar, Chip, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import ReactPlayer from 'react-player/youtube';
 import { BlogAuthor, BlogMedia } from '../../shared/types/types';
 
 export type { BlogAuthor, BlogMedia };
@@ -52,6 +53,11 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           <video src={heroMedia.src} controls style={{ width: '100%', display: 'block' }} />
         </Box>
       )}
+      {heroMedia && heroMedia.type === 'youtube' && (
+        <Box sx={{ width: '100%', borderRadius: 2, overflow: 'hidden', mb: 3, aspectRatio: '16/9' }}>
+          <ReactPlayer url={heroMedia.src} width="100%" height="100%" controls />
+        </Box>
+      )}
 
       <Box sx={{ maxWidth: 800, mx: 'auto', px: { xs: 1, sm: 2 } }}>
         {/* Title */}
@@ -91,7 +97,11 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
             {media.slice(1).map((item, idx) =>
               item.type === 'image' ? (
-                <img key={idx} src={item.src} alt={item.alt || ''} style={{ width: '100%', borderRadius: 8 }} />
+                <img key={idx} src={item.src} alt={item.alt || ''} style={{ width: '100%', borderRadius: 8 }} loading="lazy" />
+              ) : item.type === 'youtube' ? (
+                <Box key={idx} sx={{ borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
+                  <ReactPlayer url={item.src} width="100%" height="100%" controls />
+                </Box>
               ) : (
                 <video key={idx} src={item.src} controls style={{ width: '100%', borderRadius: 8 }} />
               )

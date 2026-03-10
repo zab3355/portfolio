@@ -1,6 +1,6 @@
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { styled, useMediaQuery, useTheme } from '@mui/system';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
 import SectionHeader from '../../shared/components/sectionHeader';
 
@@ -58,12 +58,12 @@ const TextContainer = styled(Box)({
   flex: '1',
 });
 
-const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, titleSection2, descriptionSection2, titleSection3, descriptionSection3 }: PersonalTemplateProps) => {
+const PersonalTemplate =({ title, title2, description, images, videoHeaderUrl, titleSection2, descriptionSection2, titleSection3, descriptionSection3 }: PersonalTemplateProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const expandImage = (image?: string) => {
-    window.open(image, '_blank');
+    if (!image?.endsWith('.webm')) window.open(image, '_blank');
   }
 
   return (
@@ -79,7 +79,7 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
             <ImageContainer>
               {!videoHeaderUrl ? (
                 images[0] ? (
-                  <img src={images[0]} onClick={() => { expandImage(images[0]) }} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                  <img src={images[0]} onClick={() => { expandImage(images[0]) }} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                 ) : null
               ) : (
                 <ReactPlayer url={videoHeaderUrl} />
@@ -105,7 +105,7 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
               </TextContainer>
               {images[1] ? (
                 <ImageContainer>
-                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                 </ImageContainer>
               ) : null}
             </Section>
@@ -118,7 +118,7 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
                 <DescriptionContainer>{descriptionSection3}</DescriptionContainer>
                 {images[2] ? (
                   <ImageContainer>
-                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                   </ImageContainer>
                 ) : null}
               </TextContainer>
@@ -131,7 +131,7 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
             <ImageContainer>
               {!videoHeaderUrl ? (
                 images[0] ? (
-                  <img src={images[0]} onClick={() => expandImage(images[0])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                  <img src={images[0]} onClick={() => expandImage(images[0])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                 ) : null
               ) : (
                 <ReactPlayer width='100%' height='auto' url={videoHeaderUrl} />
@@ -157,7 +157,7 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
               </TextContainer>
               {images[1] && (
                 <ImageContainer>
-                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} more`} style={{ width: '100%', height: 'auto' }} />
+                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} more`} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                 </ImageContainer>
               )}
             </SectionMobile>
@@ -170,7 +170,7 @@ const PersonalTemplate = ({ title, title2, description, images, videoHeaderUrl, 
                 <DescriptionContainer>{descriptionSection3}</DescriptionContainer>
                 {images[2] && (
                   <ImageContainer>
-                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                   </ImageContainer>
                 )}
               </TextContainer>

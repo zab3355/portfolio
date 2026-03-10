@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, List, ListItem, Typography, useMediaQuery } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
 import SectionHeader from '../../shared/components/sectionHeader';
 import { ProjectData } from '../../data/projectData';
@@ -99,6 +99,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
               <ProjectImage
                 src={heroImage}
                 alt={title}
+                loading="lazy"
                 onClick={() => expandImage(heroImage)}
               />
             )}
@@ -152,6 +153,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
               <ProjectImage
                 src={section.image}
                 alt={section.imageAlt || section.title || ''}
+                loading="lazy"
                 onClick={() => expandImage(section.image)}
               />
             )}

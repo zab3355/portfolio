@@ -44,7 +44,7 @@ export interface BlogAuthor {
 }
 
 export interface BlogMedia {
-  type: 'image' | 'video';
+  type: 'image' | 'video' | 'youtube';
   src: string;
   alt?: string;
 }

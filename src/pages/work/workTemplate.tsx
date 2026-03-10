@@ -1,6 +1,6 @@
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { styled, useMediaQuery, useTheme } from '@mui/system';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
 import SectionHeader from '../../shared/components/sectionHeader';
 
@@ -62,12 +62,19 @@ const TextContainer = styled(Box)({
   flex: '1',
 });
 
+const renderMedia = (src: string, alt: string) =>
+  src.endsWith('.webm') ? (
+    <video src={src} autoPlay muted loop playsInline style={{ width: '100%', height: 'auto' }} />
+  ) : (
+    <img src={src} alt={alt} style={{ width: '100%', height: 'auto' }} loading="lazy" />
+  );
+
 const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titleSection2, descriptionSection2, titleSection3, descriptionSection3, titleSection4, descriptionSection4, descriptionSectionFull }: WorkTemplateProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const expandImage = (image?: string) => {
-    window.open(image, '_blank');
+    if (!image?.endsWith('.webm')) window.open(image, '_blank');
   }
 
   return (
@@ -82,9 +89,7 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
           <Section>
             <ImageContainer>
               {!videoHeaderUrl ? (
-                images[0] ? (
-                  <img src={images[0]} onClick={() => { expandImage(images[0]) }} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
-                ) : null
+                images[0] ? renderMedia(images[0], `${title} screenshot`) : null
               ) : (
                 <ReactPlayer url={videoHeaderUrl} />
               )}
@@ -108,8 +113,8 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
                 <DescriptionContainer>{descriptionSection2}</DescriptionContainer>
               </TextContainer>
               {images[1] ? (
-                <ImageContainer>
-                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                <ImageContainer onClick={() => expandImage(images[1])}>
+                  {renderMedia(images[1], `${title} screenshot`)}
                 </ImageContainer>
               ) : null}
             </Section>
@@ -118,7 +123,7 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
           {(titleSection3 || descriptionSection3) && (
             <Section>
               <ImageContainer>
-                {images[2] && <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />}
+                {images[2] && <Box onClick={() => expandImage(images[2])}>{renderMedia(images[2], `${title} screenshot`)}</Box>}
               </ImageContainer>
               <TextContainer>
                 {titleSection3 && <SectionHeader title={titleSection3} />}
@@ -134,8 +139,8 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
                 <DescriptionContainer>{descriptionSection4}</DescriptionContainer>
               </TextContainer>
               {images[3] ? (
-                <ImageContainer>
-                  <img src={images[3]} onClick={() => expandImage(images[3])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                <ImageContainer onClick={() => expandImage(images[3])}>
+                  {renderMedia(images[3], `${title} screenshot`)}
                 </ImageContainer>
               ) : null}
             </Section>
@@ -150,8 +155,8 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
           )}
 
           {images[5] ? (
-            <ImageContainer>
-              <img src={images[5]} onClick={() => expandImage(images[5])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+            <ImageContainer onClick={() => expandImage(images[5])}>
+              {renderMedia(images[5], `${title} screenshot`)}
             </ImageContainer>
           ) : null}
         </Box>
@@ -160,9 +165,7 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
           <SectionMobile>
             <ImageContainer>
               {!videoHeaderUrl ? (
-                images[0] ? (
-                  <img src={images[0]} onClick={() => expandImage(images[0])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
-                ) : null
+                images[0] ? renderMedia(images[0], `${title} screenshot`) : null
               ) : (
                 <ReactPlayer width='100%' height='auto' url={videoHeaderUrl} />
               )}
@@ -186,8 +189,8 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
                 <DescriptionContainer>{descriptionSection2}</DescriptionContainer>
               </TextContainer>
               {images[1] && (
-                <ImageContainer>
-                  <img src={images[1]} onClick={() => expandImage(images[1])} alt={`${title} more`} style={{ width: '100%', height: 'auto' }} />
+                <ImageContainer onClick={() => expandImage(images[1])}>
+                  {renderMedia(images[1], `${title} more`)}
                 </ImageContainer>
               )}
             </SectionMobile>
@@ -199,8 +202,8 @@ const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titl
                 <SectionHeader title={titleSection3} />
                 <DescriptionContainer>{descriptionSection3}</DescriptionContainer>
                 {images[2] && (
-                  <ImageContainer>
-                    <img src={images[2]} onClick={() => expandImage(images[2])} alt={`${title} screenshot`} style={{ width: '100%', height: 'auto' }} />
+                  <ImageContainer onClick={() => expandImage(images[2])}>
+                    {renderMedia(images[2], `${title} screenshot`)}
                   </ImageContainer>
                 )}
               </TextContainer>

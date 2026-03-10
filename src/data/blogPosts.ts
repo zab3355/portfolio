@@ -49,9 +49,12 @@ const blogPosts: BlogPost[] = [
     date: 'March 10 2026',
     media: [
       {
-        type: 'image',
-        src: skiingImage,
-        alt: 'GoPro Ski Season Compilation',
+        type: 'youtube',
+        src: 'https://www.youtube.com/watch?v=zB-bKCzcRvY',
+      },
+      {
+        type: 'youtube',
+        src: 'https://www.youtube.com/watch?v=fmZIYJMRGY0',
       },
     ],
   },

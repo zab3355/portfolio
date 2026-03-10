@@ -9,37 +9,37 @@ import mindexImage2 from '../assets/images/projects/mindex2.png';
 import mindexImage3 from '../assets/images/projects/mindex3.png';
 
 // Sandbox section images
-import sandboxImage1 from '../assets/images/projects/sandbox1.png';
+import sandboxImage1 from '../assets/images/projects/sandbox1.webp';
 import sandboxImage2 from '../assets/images/projects/sandbox2.jpg';
 import sandboxImage3 from '../assets/images/projects/sandboxhalf1.jpg';
 import sandboxImage4 from '../assets/images/projects/sandbox3.png';
 
 // Wegmans section images
-import wegmansImage1 from '../assets/images/projects/wegmans1.jpg';
+import wegmansImage1 from '../assets/images/projects/wegmans1.webp';
 import wegmansImage2 from '../assets/images/projects/wegmans2.png';
-import wegmansImage3 from '../assets/images/projects/wegmans3.png';
-import wegmansImage4 from '../assets/images/projects/wegmans4.png';
+import wegmansImage3 from '../assets/images/projects/wegmans3.webp';
+import wegmansImage4 from '../assets/images/projects/wegmans4.webp';
 
 // Osmose section images
 import osmose1 from '../assets/images/projects/osmose1.png';
-import osmose2 from '../assets/images/projects/osmose2.jpg';
+import osmose2 from '../assets/images/projects/osmose2.webp';
 import osmose3 from '../assets/images/projects/osmose3.png';
 import osmose4 from '../assets/images/projects/osmose4.png';
 
 // SI section images
-import si1 from '../assets/images/projects/si1.png';
-import si2 from '../assets/images/projects/si2.jpg';
-import si3 from '../assets/images/projects/si3.jpg';
+import si1 from '../assets/images/projects/si1.webp';
+import si2 from '../assets/images/projects/si2.webp';
+import si3 from '../assets/images/projects/si3.webp';
 import si4 from '../assets/images/projects/si4.jpg';
 
 // The Shore section images
-import theShoreImage1 from '../assets/images/projects/theshore1.gif';
-import theShoreImage2 from '../assets/images/projects/thrshore2.png';
+import theShoreImage1 from '../assets/images/projects/theshore1.webm';
+import theShoreImage2 from '../assets/images/projects/thrshore2.webp';
 
 // Weather Watcher section images
 import weatherWatcherImage1 from '../assets/images/projects/weatherwatcher1.jpg';
-import weatherWatcherImage2 from '../assets/images/projects/weatherwatcher2.jpg';
-import weatherWatcherImage3 from '../assets/images/projects/weatherWatcher3.jpg';
+import weatherWatcherImage2 from '../assets/images/projects/weatherwatcher2.webp';
+import weatherWatcherImage3 from '../assets/images/projects/weatherWatcher3.webp';
 
 export interface ProjectSection {
   title?: string;
