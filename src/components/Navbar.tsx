@@ -187,8 +187,6 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
       <MobileNavOverlay
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        onThemeChange={onThemeChange}
-        isDarkMode={isDarkMode}
         selectedRoute={selectedRoute}
       />
 

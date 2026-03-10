@@ -5,8 +5,6 @@ import { NAV_ITEMS } from '../../shared/config/navItems';
 const mockProps = {
   open: true,
   onClose: jest.fn(),
-  onThemeChange: jest.fn(),
-  isDarkMode: true,
   selectedRoute: '/',
 };
 

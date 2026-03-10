@@ -2,59 +2,95 @@ import { Box, Typography, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Brightness4Outlined, Brightness7Outlined } from '@mui/icons-material';
+import { CloseRounded } from '@mui/icons-material';
 import { NAV_ITEMS } from '../shared/config/navItems';
 import BinaryRain from '../shared/components/BinaryRain';
 
 interface MobileNavOverlayProps {
   open: boolean;
   onClose: () => void;
-  onThemeChange: () => void;
-  isDarkMode: boolean;
   selectedRoute: string;
 }
+
+const OverlayContainer = styled(motion.div)({
+  position: 'fixed',
+  inset: 0,
+  backgroundColor: '#07070f',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  paddingLeft: 32,
+  overflow: 'hidden',
+});
+
+const NavContainer = styled(motion.nav)({
+  position: 'relative',
+  zIndex: 2,
+  width: '100%',
+});
 
 const Orb = styled(motion.div)({
   position: 'absolute',
   borderRadius: '50%',
   filter: 'blur(100px)',
-  opacity: 0.15,
+  opacity: 0.18,
   pointerEvents: 'none',
 });
 
 const RainOverlay = styled(Box)({
   position: 'absolute',
   inset: 0,
-  opacity: 0.08,
+  opacity: 0.06,
   pointerEvents: 'none',
   zIndex: 0,
 });
 
+const easeOut: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const easeIn: [number, number, number, number] = [0.7, 0, 0.84, 0];
+
 const overlayVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.23, 1, 0.32, 1] } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.4, ease: 'easeIn' as const } },
+  hidden: { clipPath: 'inset(0 0 100% 0)', opacity: 0 },
+  visible: {
+    clipPath: 'inset(0 0 0% 0)',
+    opacity: 1,
+    transition: { duration: 0.55, ease: easeOut },
+  },
+  exit: {
+    clipPath: 'inset(0 0 100% 0)',
+    opacity: 0,
+    transition: { duration: 0.4, ease: easeIn },
+  },
 };
 
 const linkContainerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
   exit: { transition: { staggerChildren: 0.04, staggerDirection: -1 as const } },
 };
 
 const linkVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 200, damping: 22 } },
-  exit: { opacity: 0, y: 20, transition: { duration: 0.15 } },
+  hidden: { opacity: 0, x: -40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { type: 'spring' as const, stiffness: 240, damping: 26 },
+  },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.12 } },
 };
 
-const MobileNavOverlay = ({
-  open,
-  onClose,
-  onThemeChange,
-  isDarkMode,
-  selectedRoute,
-}: MobileNavOverlayProps) => {
+const closeVariants = {
+  hidden: { opacity: 0, rotate: -90, scale: 0.6 },
+  visible: {
+    opacity: 1,
+    rotate: 0,
+    scale: 1,
+    transition: { delay: 0.35, type: 'spring' as const, stiffness: 300, damping: 22 },
+  },
+  exit: { opacity: 0, rotate: 90, scale: 0.6, transition: { duration: 0.15 } },
+};
+
+const MobileNavOverlay = ({ open, onClose, selectedRoute }: MobileNavOverlayProps) => {
   const theme = useTheme();
   const { orb1 } = theme.palette.custom.splash;
   const accent = theme.palette.custom.orangePalette.background;
@@ -62,41 +98,72 @@ const MobileNavOverlay = ({
   return (
     <AnimatePresence>
       {open && (
-        <Box
-          component={motion.div as any}
+        <OverlayContainer
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
-          sx={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: '#07070f',
-            zIndex: (t: any) => t.zIndex.appBar + 10,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            pl: 4,
-            overflow: 'hidden',
-          }}
+          style={{ zIndex: theme.zIndex.appBar + 10 }}
         >
           <RainOverlay>
             <BinaryRain variant="banner" />
           </RainOverlay>
+
           <Orb
-            style={{ width: 350, height: 350, top: '-15%', right: '-10%', background: orb1 }}
-            animate={{ x: [0, 20, -10, 0], y: [0, 15, -8, 0] }}
-            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ width: 380, height: 380, top: '-10%', right: '-12%', background: orb1 }}
+            animate={{ x: [0, 24, -12, 0], y: [0, 18, -10, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <Orb
+            style={{ width: 200, height: 200, bottom: '5%', left: '-5%', background: accent }}
+            animate={{ x: [0, -14, 8, 0], y: [0, 12, -6, 0] }}
+            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
           />
 
+          {/* Close button */}
           <Box
-            component={motion.nav as any}
+            component={motion.div}
+            variants={closeVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            sx={{ position: 'absolute', top: 20, right: 20, zIndex: 10 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.15, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+              style={{ display: 'inline-flex' }}
+            >
+              <IconButton
+                onClick={onClose}
+                aria-label="Close navigation"
+                sx={{
+                  color: 'rgba(255,255,255,0.85)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: '50%',
+                  width: 44,
+                  height: 44,
+                  backdropFilter: 'blur(8px)',
+                  transition: 'background-color 0.2s, border-color 0.2s, color 0.2s',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.08)',
+                    borderColor: accent,
+                    color: accent,
+                  },
+                }}
+              >
+                <CloseRounded />
+              </IconButton>
+            </motion.div>
+          </Box>
+
+          {/* Nav links */}
+          <NavContainer
             variants={linkContainerVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            sx={{ position: 'relative', zIndex: 2, width: '100%' }}
           >
             {NAV_ITEMS.map(({ path, label }) => {
               const isActive = selectedRoute === path;
@@ -122,42 +189,36 @@ const MobileNavOverlay = ({
                         background: accent,
                         transform: 'scaleX(0)',
                         transformOrigin: 'left',
-                        transition: 'transform 0.25s ease',
+                        transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1)',
                       },
-                      '&:hover::after': {
-                        transform: 'scaleX(1)',
-                      },
+                      '&:hover::after': { transform: 'scaleX(1)' },
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontFamily: 'Poppins',
-                        fontWeight: 700,
-                        fontSize: { xs: '44px', sm: '56px' },
-                        color: isActive ? accent : 'rgba(255,255,255,0.92)',
-                        lineHeight: 1.1,
-                        transition: 'color 0.2s',
-                        '&:hover': { color: accent },
-                      }}
+                    <motion.span
+                      whileHover={{ x: 8 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                      style={{ display: 'block' }}
                     >
-                      {label}
-                    </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: 'Poppins',
+                          fontWeight: 700,
+                          fontSize: { xs: '44px', sm: '56px' },
+                          color: isActive ? accent : 'rgba(255,255,255,0.92)',
+                          lineHeight: 1.1,
+                          transition: 'color 0.2s',
+                          '&:hover': { color: accent },
+                        }}
+                      >
+                        {label}
+                      </Typography>
+                    </motion.span>
                   </Box>
                 </motion.div>
               );
             })}
-
-            <motion.div variants={linkVariants}>
-              <IconButton
-                onClick={onThemeChange}
-                aria-label="Change theme"
-                sx={{ color: 'rgba(255,255,255,0.7)', mt: 1, ml: -1 }}
-              >
-                {isDarkMode ? <Brightness7Outlined /> : <Brightness4Outlined />}
-              </IconButton>
-            </motion.div>
-          </Box>
-        </Box>
+          </NavContainer>
+        </OverlayContainer>
       )}
     </AnimatePresence>
   );

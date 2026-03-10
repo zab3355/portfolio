@@ -29,8 +29,8 @@ ENV REACT_APP_FIREBASE_DATABASE_URL=$REACT_APP_FIREBASE_DATABASE_URL
 ENV DISABLE_ESLINT_PLUGIN=true
 
 # Install frontend deps
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Copy source
 COPY . .

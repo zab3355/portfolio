@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid2 as Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import blogPosts from '../../data/blogPosts';
 import BlogPostCard from './blogPostcard';
@@ -33,7 +33,7 @@ export default function Blog() {
         ) : (
           <Grid container spacing={2}>
             {blogPosts.map((post, idx) => (
-              <Grid item xs={12} sm={6} md={4} key={idx}>
+              <Grid key={idx} size={{ xs: 12, sm: 6, md: 4 }}>
                 <BlogPostCard post={post} onClick={() => setSelectedPost(post)} />
               </Grid>
             ))}
