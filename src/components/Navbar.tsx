@@ -111,8 +111,8 @@ const Navbar = ({ onThemeChange, isDarkMode }: NavbarProps) => {
           disableGutters
           sx={{
             minHeight: { xs: 86, sm: 96 },
-            paddingLeft: { xs: 'max(12px, env(safe-area-inset-left))', sm: 2 },
-            paddingRight: { xs: 'max(8px, env(safe-area-inset-right))', sm: 3 },
+            paddingLeft: { xs: '12px', sm: 2 },
+            paddingRight: { xs: '8px', sm: 3 },
           }}
         >
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
