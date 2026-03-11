@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111119"/>
+      <stop offset="100%" stop-color="#0a0a12"/>
+    </linearGradient>
+    <linearGradient id="text-g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#f0f0f0"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <!-- Subtle orange accent bar at bottom -->
+  <rect x="0" y="1068" width="1080" height="8" fill="#ff5722" opacity="0.9"/>
+  <!-- Faint orange glow behind text -->
+  <ellipse cx="540" cy="500" rx="320" ry="120" fill="#ff5722" opacity="0.04"/>
+  <!-- "mise" wordmark in white -->
+  <text
+    x="540" y="620"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="360"
+    font-weight="700"
+    fill="url(#text-g)"
+    text-anchor="middle"
+    letter-spacing="-10"
+    opacity="0.97"
+  >mise</text>
+  <!-- URL subtitle -->
+  <text
+    x="540" y="760"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="36"
+    fill="rgba(255,255,255,0.35)"
+    text-anchor="middle"
+    letter-spacing="8"
+  >MISE · mise.zabrown.com</text>
+</svg>

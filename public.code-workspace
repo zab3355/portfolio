@@ -1,0 +1,35 @@
+{
+	"folders": [
+		{
+			"name": "public",
+			"path": "../../../.Trash/public"
+		},
+		{
+			"name": "portfolio",
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"activityBar.activeBackground": "#b2422f",
+			"activityBar.background": "#b2422f",
+			"activityBar.foreground": "#e7e7e7",
+			"activityBar.inactiveForeground": "#e7e7e799",
+			"activityBarBadge.background": "#2fb141",
+			"activityBarBadge.foreground": "#e7e7e7",
+			"commandCenter.border": "#e7e7e799",
+			"sash.hoverBorder": "#b2422f",
+			"statusBar.background": "#8a3324",
+			"statusBar.foreground": "#e7e7e7",
+			"statusBarItem.hoverBackground": "#b2422f",
+			"statusBarItem.remoteBackground": "#8a3324",
+			"statusBarItem.remoteForeground": "#e7e7e7",
+			"titleBar.activeBackground": "#8a3324",
+			"titleBar.activeForeground": "#e7e7e7",
+			"titleBar.inactiveBackground": "#8a332499",
+			"titleBar.inactiveForeground": "#e7e7e799"
+		},
+		"peacock.color": "#8A3324",
+		"git.ignoreLimitWarning": true
+	}
+}
