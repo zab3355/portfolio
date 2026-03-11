@@ -31,7 +31,27 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ src, content }) => 
       className="markdown-body"
       style={{ fontFamily: 'inherit', lineHeight: 1.7 }}
     >
-      <ReactMarkdown>{markdownToRender}</ReactMarkdown>
+      <ReactMarkdown
+        components={{
+          img: ({ src, alt }) => (
+            <span style={{ display: 'block', textAlign: 'center', margin: '1.5rem 0' }}>
+              <img
+                src={src}
+                alt={alt ?? ''}
+                style={{
+                  maxWidth: '100%',
+                  width: '560px',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  display: 'inline-block',
+                }}
+              />
+            </span>
+          ),
+        }}
+      >
+        {markdownToRender}
+      </ReactMarkdown>
     </div>
   );
 };

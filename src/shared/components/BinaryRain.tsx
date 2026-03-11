@@ -33,6 +33,7 @@ const CanvasWrapper = styled(Box, {
 const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseColRef = useRef(-999);
+  const rafRef = useRef<number>(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const rainColor = theme.palette.custom.splash.binaryColor;
@@ -44,15 +45,18 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let cols: number;
+    let drops: number[];
+
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
+      cols = Math.floor(canvas.width / fontSize);
+      drops = Array(cols).fill(1);
     };
-    resize();
 
     const fontSize = 13;
-    const cols = Math.floor(canvas.width / fontSize);
-    const drops: number[] = Array(cols).fill(1);
+    resize();
 
     const draw = () => {
       ctx.fillStyle = 'rgba(7, 7, 15, 0.08)';
@@ -94,14 +98,24 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
       mouseColRef.current = -999;
     };
 
-    const interval = setInterval(draw, isMobile ? 100 : 60);
+    const targetInterval = isMobile ? 100 : 60;
+    let lastTime = 0;
+    const animate = (time: number) => {
+      if (time - lastTime >= targetInterval) {
+        draw();
+        lastTime = time;
+      }
+      rafRef.current = requestAnimationFrame(animate);
+    };
+    rafRef.current = requestAnimationFrame(animate);
+
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(canvas);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseleave', onMouseLeave);
 
     return () => {
-      clearInterval(interval);
+      cancelAnimationFrame(rafRef.current);
       resizeObserver.disconnect();
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseleave', onMouseLeave);

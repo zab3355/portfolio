@@ -13,6 +13,7 @@ export interface BlogTemplateProps {
   authors: BlogAuthor[];
   media?: BlogMedia[];
   children: React.ReactNode;
+  footer?: React.ReactNode;
 }
 
 const BlogTemplate: React.FC<BlogTemplateProps> = ({
@@ -22,6 +23,7 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
   authors,
   media = [],
   children,
+  footer,
 }) => {
   const theme = useTheme();
   const accent = theme.palette.custom.orangePalette.background;
@@ -31,35 +33,14 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
 
   return (
     <Box>
-      {/* Side-by-side YouTube players (when all media are YouTube) */}
-      {allYoutube && (
-        <Box sx={{ display: 'flex', gap: 2, mb: 3, flexDirection: { xs: 'column', sm: 'row' } }}>
-          {media.map((item, idx) => (
-            <Box key={idx} sx={{ flex: 1, borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
-              <ReactPlayer url={item.src} width="100%" height="100%" controls />
-            </Box>
-          ))}
-        </Box>
-      )}
-
-      {/* Hero image */}
-      {!allYoutube && heroMedia && heroMedia.type === 'image' && (
+      {/* Hero image only — stays at top */}
+      {heroMedia && heroMedia.type === 'image' && (
         <Box sx={{ width: '100%', maxHeight: 420, overflow: 'hidden', borderRadius: 2, mb: 3 }}>
           <img
             src={heroMedia.src}
             alt={heroMedia.alt || title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
-        </Box>
-      )}
-      {!allYoutube && heroMedia && heroMedia.type === 'video' && (
-        <Box sx={{ width: '100%', borderRadius: 2, overflow: 'hidden', mb: 3 }}>
-          <video src={heroMedia.src} controls style={{ width: '100%', display: 'block' }} />
-        </Box>
-      )}
-      {!allYoutube && heroMedia && heroMedia.type === 'youtube' && (
-        <Box sx={{ width: '100%', borderRadius: 2, overflow: 'hidden', mb: 3, aspectRatio: '16/9' }}>
-          <ReactPlayer url={heroMedia.src} width="100%" height="100%" controls />
         </Box>
       )}
 
@@ -79,7 +60,7 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
         </Typography>
 
         {/* Accent underline */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mb: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: accent, flexShrink: 0 }} />
           <Box sx={{ width: 120, height: 2, backgroundColor: accent }} />
         </Box>
@@ -96,13 +77,22 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           <Typography variant="caption" color="text.secondary">{date}</Typography>
         </Box>
 
-        {/* Additional media (non-YouTube-only posts) */}
-        {!allYoutube && media.slice(1).length > 0 && (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
-            {media.slice(1).map((item, idx) =>
-              item.type === 'image' ? (
-                <img key={idx} src={item.src} alt={item.alt || ''} style={{ width: '100%', borderRadius: 8 }} loading="lazy" />
-              ) : item.type === 'youtube' ? (
+        <Box sx={{ mt: 2 }}>{children}</Box>
+
+        {/* Videos at bottom */}
+        {allYoutube && (
+          <Box sx={{ display: 'flex', gap: 2, mt: 4, flexDirection: { xs: 'column', sm: 'row' } }}>
+            {media.map((item, idx) => (
+              <Box key={idx} sx={{ flex: 1, borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
+                <ReactPlayer url={item.src} width="100%" height="100%" controls />
+              </Box>
+            ))}
+          </Box>
+        )}
+        {!allYoutube && media.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 4 }}>
+            {media.map((item, idx) =>
+              item.type === 'image' ? null : item.type === 'youtube' ? (
                 <Box key={idx} sx={{ borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
                   <ReactPlayer url={item.src} width="100%" height="100%" controls />
                 </Box>
@@ -113,7 +103,7 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           </Box>
         )}
 
-        <Box sx={{ mt: 2 }}>{children}</Box>
+        {footer && <Box sx={{ mt: 4 }}>{footer}</Box>}
       </Box>
     </Box>
   );

@@ -13,13 +13,13 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, onBack }) => {
                 tag={post.tag}
                 authors={post.authors}
                 media={post.media}
+                footer={<CircleButton onClick={onBack}>Back to Blog</CircleButton>}
             >
                 {post.markdownPath ? (
                     <MarkdownRenderer src={post.markdownPath} />
                 ) : (
                     <MarkdownRenderer content={post.description} />
                 )}
-                <CircleButton onClick={onBack}>Back to Blog</CircleButton>
             </BlogTemplate>
         </Box>
     );

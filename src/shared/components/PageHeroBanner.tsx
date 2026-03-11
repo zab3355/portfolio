@@ -47,7 +47,7 @@ const OrbElement = styled(Box, {
   height: size,
   borderRadius: '50%',
   backgroundColor: color,
-  filter: 'blur(100px)',
+  filter: 'blur(60px)',
   opacity: 0.22,
   pointerEvents: 'none',
   zIndex: 0,
@@ -55,6 +55,7 @@ const OrbElement = styled(Box, {
   left: left ?? 'auto',
   bottom: bottom ?? 'auto',
   right: right ?? 'auto',
+  willChange: 'transform',
   animation: `orbDrift${duration} ${duration}s ease-in-out infinite`,
 }));
 
@@ -75,18 +76,9 @@ const BottomDivider = styled(Box, {
   zIndex: 3,
 }));
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.045 } },
-};
-
-const letterVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring' as const, stiffness: 200, damping: 20 },
-  },
+const titleVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
 };
 
 const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
@@ -95,7 +87,6 @@ const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
   const orb1Color = theme.palette.custom.splash.orb1;
   const orb2Color = theme.palette.custom.splash.orb2;
 
-  const letters = title.split('');
 
   return (
     <BannerContainer>
@@ -150,10 +141,10 @@ const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
           {`// ${filePath}`}
         </Typography>
 
-        {/* Staggered shimmer title */}
+        {/* Shimmer title */}
         <Box
           component={motion.h1 as any}
-          variants={containerVariants}
+          variants={titleVariants}
           initial="hidden"
           animate="visible"
           role="heading"
@@ -165,8 +156,6 @@ const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
             margin: 0,
             lineHeight: 1.1,
             paddingBottom: '0.15em',
-            display: 'inline-flex',
-            flexWrap: 'wrap',
             background: `linear-gradient(135deg, #ffffff 30%, ${accent} 60%, #ffffff 90%)`,
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
@@ -179,11 +168,7 @@ const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
             },
           }}
         >
-          {letters.map((char, i) => (
-            <motion.span key={i} variants={letterVariants} style={{ display: 'inline-block' }}>
-              {char === ' ' ? '\u00A0' : char}
-            </motion.span>
-          ))}
+          {title}
         </Box>
 
         {/* Optional subtitle */}

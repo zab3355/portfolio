@@ -63,7 +63,7 @@ const ProgressBar = styled(LinearProgress)(({ theme }) => ({
 
 const LogoButton = styled(Logo)(({ theme }) => ({
   height: 60,
-  width: 'fit-content',
+  width: 'auto',
   cursor: 'pointer',
   transition: 'transform 0.2s ease',
   '&:hover': {

@@ -16,37 +16,56 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); }}
             aria-label={`Read post: ${post.title}`}
             sx={{
+                position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
                 borderRadius: 2,
-                boxShadow: 1,
                 backgroundColor: 'background.paper',
-                overflow: 'hidden',
                 cursor: 'pointer',
-                border: '2px solid transparent',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-                '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: `0 12px 32px rgba(0,0,0,0.25)`,
-                    borderColor: accent,
-                    '& .card-img': {
-                        transform: 'scale(1.04)',
-                    },
-                    '& .card-title': {
-                        color: accent,
+                // Only transform transitions — GPU composited, no repaint
+                transition: 'transform 0.2s ease',
+                // Accent border via inset box-shadow, toggled with opacity (compositor-only)
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: 'inherit',
+                    boxShadow: `inset 0 0 0 2px ${accent}`,
+                    opacity: 0,
+                    transition: 'opacity 0.2s ease',
+                    pointerEvents: 'none',
+                    zIndex: 2,
+                },
+                // Drop shadow toggled with opacity (compositor-only, visible because no overflow:hidden)
+                '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: 'inherit',
+                    boxShadow: `0 12px 32px rgba(0,0,0,0.3)`,
+                    opacity: 0,
+                    transition: 'opacity 0.2s ease',
+                    pointerEvents: 'none',
+                },
+                '@media (hover: hover)': {
+                    '&:hover': {
+                        transform: 'translateY(-4px)',
+                        '&::before': { opacity: 1 },
+                        '&::after': { opacity: 1 },
+                        '& .card-img': { transform: 'scale(1.04)' },
                     },
                 },
                 '&:focus-visible': {
                     outline: `2px solid ${accent}`,
                     outlineOffset: 2,
                     transform: 'translateY(-2px)',
-                    boxShadow: `0 8px 24px rgba(0,0,0,0.2)`,
-                    borderColor: accent,
+                    '&::before': { opacity: 1 },
+                    '&::after': { opacity: 0.7 },
                 },
             }}
         >
             {/* Image wrapper — clips the scale animation */}
-            <Box sx={{ overflow: 'hidden', aspectRatio: '16/9' }}>
+            <Box sx={{ overflow: 'hidden', aspectRatio: '16/9', borderRadius: '8px 8px 0 0' }}>
                 <Box
                     component="img"
                     className="card-img"
@@ -69,11 +88,9 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onClick }) => {
                     sx={{ mb: 1, backgroundColor: accent, color: '#fff', fontWeight: 600 }}
                 />
                 <Typography
-                    className="card-title"
                     variant="h6"
                     fontWeight={700}
                     gutterBottom
-                    sx={{ transition: 'color 0.2s ease' }}
                 >
                     {post.title}
                 </Typography>
