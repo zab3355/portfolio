@@ -1,8 +1,29 @@
-import * as React from 'react';
-import { Box, Avatar, Chip, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import ReactPlayer from 'react-player/youtube';
+import { ReactNode, Suspense, lazy } from 'react';
+import { Box, Avatar, Chip, Typography, CircularProgress } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 import { BlogAuthor, BlogMedia } from '../../shared/types/types';
+
+const ReactPlayer = lazy(() => import('react-player/youtube'));
+
+function PlayerFallback() {
+  return (
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', aspectRatio: '16/9', backgroundColor: 'action.hover', borderRadius: 2 }}>
+    <CircularProgress size={32} />
+  </Box>
+  );
+}
+
+const HeroImage = styled('img')({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  display: 'block',
+});
+
+const HostedVideo = styled('video')({
+  width: '100%',
+  borderRadius: 8,
+});
 
 export type { BlogAuthor, BlogMedia };
 
@@ -12,11 +33,11 @@ export interface BlogTemplateProps {
   tag: string;
   authors: BlogAuthor[];
   media?: BlogMedia[];
-  children: React.ReactNode;
-  footer?: React.ReactNode;
+  children: ReactNode;
+  footer?: ReactNode;
 }
 
-const BlogTemplate: React.FC<BlogTemplateProps> = ({
+export default function BlogTemplate({
   title,
   date,
   tag,
@@ -24,7 +45,7 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
   media = [],
   children,
   footer,
-}) => {
+}: BlogTemplateProps) {
   const theme = useTheme();
   const accent = theme.palette.custom.orangePalette.background;
 
@@ -36,10 +57,10 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
       {/* Hero image only — stays at top */}
       {heroMedia && heroMedia.type === 'image' && (
         <Box sx={{ width: '100%', maxHeight: 420, overflow: 'hidden', borderRadius: 2, mb: 3 }}>
-          <img
+          <HeroImage
             src={heroMedia.src}
             alt={heroMedia.alt || title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            decoding="async"
           />
         </Box>
       )}
@@ -84,7 +105,9 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
           <Box sx={{ display: 'flex', gap: 2, mt: 4, flexDirection: { xs: 'column', sm: 'row' } }}>
             {media.map((item, idx) => (
               <Box key={idx} sx={{ flex: 1, borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
-                <ReactPlayer url={item.src} width="100%" height="100%" controls />
+                <Suspense fallback={<PlayerFallback />}>
+                  <ReactPlayer url={item.src} width="100%" height="100%" controls />
+                </Suspense>
               </Box>
             ))}
           </Box>
@@ -94,10 +117,12 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
             {media.map((item, idx) =>
               item.type === 'image' ? null : item.type === 'youtube' ? (
                 <Box key={idx} sx={{ borderRadius: 2, overflow: 'hidden', aspectRatio: '16/9' }}>
-                  <ReactPlayer url={item.src} width="100%" height="100%" controls />
+                  <Suspense fallback={<PlayerFallback />}>
+                    <ReactPlayer url={item.src} width="100%" height="100%" controls />
+                  </Suspense>
                 </Box>
               ) : (
-                <video key={idx} src={item.src} controls style={{ width: '100%', borderRadius: 8 }} />
+                <HostedVideo key={idx} src={item.src} controls preload="metadata" />
               )
             )}
           </Box>
@@ -107,6 +132,4 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({
       </Box>
     </Box>
   );
-};
-
-export default BlogTemplate;
+}

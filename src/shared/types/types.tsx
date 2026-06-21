@@ -50,6 +50,7 @@ export interface BlogMedia {
 }
 
 export interface BlogPost {
+  slug: string;
   img: string;
   tag: string;
   title: string;
@@ -62,10 +63,9 @@ export interface BlogPost {
 
 export interface BlogDetailProps {
   post: BlogPost;
-  onBack: () => void;
 }
 
 export interface BlogPostCardProps {
   post: BlogPost;
-  onClick: () => void;
+  onOpenPost: (slug: string) => void;
 }

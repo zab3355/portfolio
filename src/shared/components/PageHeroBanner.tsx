@@ -7,6 +7,7 @@ interface PageHeroBannerProps {
   title: string;
   filePath: string;
   subtitle?: string;
+  visualMode?: 'default' | 'blog';
 }
 
 interface OrbProps {
@@ -81,18 +82,19 @@ const titleVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
 };
 
-const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
+const PageHeroBanner = ({ title, filePath, subtitle, visualMode = 'default' }: PageHeroBannerProps) => {
   const theme = useTheme();
   const accent = theme.palette.custom.orangePalette.background;
   const orb1Color = theme.palette.custom.splash.orb1;
   const orb2Color = theme.palette.custom.splash.orb2;
+  const isBlogMode = visualMode === 'blog';
 
 
   return (
     <BannerContainer>
       {/* Layer 1: Binary rain */}
-      <Box sx={{ opacity: 0.18, position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-        <BinaryRain variant="banner" />
+      <Box sx={{ opacity: isBlogMode ? 0.12 : 0.18, position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
+        <BinaryRain variant="banner" intensity={isBlogMode ? 'subtle' : 'default'} />
       </Box>
 
       {/* Layer 2: Orbs with autonomous drift */}
@@ -112,17 +114,17 @@ const PageHeroBanner = ({ title, filePath, subtitle }: PageHeroBannerProps) => {
       >
         <OrbElement
           color={orb1Color}
-          size={400}
+          size={isBlogMode ? 340 : 400}
           top="-30%"
           left="-8%"
-          duration={20}
+          duration={isBlogMode ? 24 : 20}
         />
         <OrbElement
           color={orb2Color}
-          size={300}
+          size={isBlogMode ? 260 : 300}
           bottom="-40%"
           right="-5%"
-          duration={25}
+          duration={isBlogMode ? 30 : 25}
         />
       </Box>
 

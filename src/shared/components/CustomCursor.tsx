@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import useRafMousemove from '../hooks/useRafMousemove';
 
 
 interface Particle {
@@ -34,17 +35,21 @@ const CustomCursor = () => {
   const t4x = useSpring(mouseX, { stiffness: 30, damping: 15 });
   const t4y = useSpring(mouseY, { stiffness: 30, damping: 15 });
 
+  useRafMousemove((e) => {
+    if (isMobile) {
+      return;
+    }
+
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
+    if (!isVisibleRef.current) {
+      isVisibleRef.current = true;
+      setIsVisible(true);
+    }
+  }, !isMobile);
+
   useEffect(() => {
     if (isMobile) return;
-
-    const onMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-      if (!isVisibleRef.current) {
-        isVisibleRef.current = true;
-        setIsVisible(true);
-      }
-    };
 
     const onClick = (e: MouseEvent) => {
       const count = 10;
@@ -63,14 +68,12 @@ const CustomCursor = () => {
       }, 650);
     };
 
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('click', onClick);
+    window.addEventListener('click', onClick, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', onMove);
       window.removeEventListener('click', onClick);
     };
-  }, [isMobile, mouseX, mouseY]);
+  }, [isMobile]);
 
   if (isMobile) return null;
 

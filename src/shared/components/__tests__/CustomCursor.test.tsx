@@ -9,6 +9,7 @@ jest.mock('framer-motion', () => {
     ReactMock.createElement('div', { ...props, ref }, children)
   );
   return {
+    AnimatePresence: ({ children }: any) => ReactMock.createElement(ReactMock.Fragment, null, children),
     motion: { div: MockDiv },
     useMotionValue: (init: number) => ({ set: jest.fn(), get: () => init }),
     useSpring: (v: any) => v,
@@ -43,26 +44,26 @@ describe('CustomCursor', () => {
     const removeSpy = jest.spyOn(window, 'removeEventListener');
 
     const { unmount } = render(<CustomCursor />);
-    expect(addSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
+    expect(addSpy).toHaveBeenCalledWith('mousemove', expect.any(Function), { passive: true });
+    expect(addSpy).toHaveBeenCalledWith('click', expect.any(Function), { passive: true });
 
     unmount();
     expect(removeSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
+    expect(removeSpy).toHaveBeenCalledWith('click', expect.any(Function));
 
     addSpy.mockRestore();
     removeSpy.mockRestore();
   });
 
-  it('registers document hover listeners on desktop', () => {
+  it('does not register document hover listeners on desktop', () => {
     const docAddSpy = jest.spyOn(document, 'addEventListener');
     const docRemoveSpy = jest.spyOn(document, 'removeEventListener');
 
     const { unmount } = render(<CustomCursor />);
-    expect(docAddSpy).toHaveBeenCalledWith('mouseover', expect.any(Function));
-    expect(docAddSpy).toHaveBeenCalledWith('mouseout', expect.any(Function));
+    expect(docAddSpy).not.toHaveBeenCalled();
 
     unmount();
-    expect(docRemoveSpy).toHaveBeenCalledWith('mouseover', expect.any(Function));
-    expect(docRemoveSpy).toHaveBeenCalledWith('mouseout', expect.any(Function));
+    expect(docRemoveSpy).not.toHaveBeenCalled();
 
     docAddSpy.mockRestore();
     docRemoveSpy.mockRestore();
