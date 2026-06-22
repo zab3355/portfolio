@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { Box, Grid2 as Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import blogPosts from '../../data/blogPosts';
 import BlogPostCard from './blogPostcard';
-import BlogDetail from './blogDetail';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
-import { BlogPost } from '../../shared/types/types';
+
+const BlogRoot = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+});
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -18,27 +22,27 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export default function Blog() {
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const navigate = useNavigate();
+  const handleOpenPost = useCallback((slug: string) => {
+    navigate(`/blog/${slug}`);
+  }, [navigate]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    <BlogRoot>
       <PageHeroBanner
         title="Blog"
         filePath="pages/blog/blog.tsx"
+        visualMode="blog"
       />
       <StyledContainer>
-        {selectedPost ? (
-          <BlogDetail post={selectedPost} onBack={() => setSelectedPost(null)} />
-        ) : (
-          <Grid container spacing={2}>
-            {blogPosts.map((post, idx) => (
-              <Grid key={idx} size={{ xs: 12, sm: 6, md: 4 }}>
-                <BlogPostCard post={post} onClick={() => setSelectedPost(post)} />
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        <Grid container spacing={2}>
+          {blogPosts.map((post) => (
+            <Grid key={post.slug} size={{ xs: 12, sm: 6, md: 4 }}>
+              <BlogPostCard post={post} onOpenPost={handleOpenPost} />
+            </Grid>
+          ))}
+        </Grid>
       </StyledContainer>
-    </Box>
+    </BlogRoot>
   );
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen } from '../../test-utils';
 import PageHeroBanner from '../PageHeroBanner';
 
+const mockBinaryRain = jest.fn(() => <div data-testid="binary-rain" />);
+
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => {
   const ReactMock = require('react');
@@ -22,7 +24,7 @@ jest.mock('framer-motion', () => {
 });
 
 // Mock BinaryRain to avoid canvas issues
-jest.mock('../BinaryRain', () => () => <div data-testid="binary-rain" />);
+jest.mock('../BinaryRain', () => (props: any) => mockBinaryRain(props));
 
 // Provide ResizeObserver for jsdom
 beforeAll(() => {
@@ -33,6 +35,10 @@ beforeAll(() => {
 });
 
 describe('PageHeroBanner', () => {
+  beforeEach(() => {
+    mockBinaryRain.mockClear();
+  });
+
   it('renders a heading with aria-label matching title', () => {
     render(<PageHeroBanner title="Portfolio" filePath="pages/portfolio.tsx" />);
     expect(screen.getByRole('heading', { name: 'Portfolio' })).toBeInTheDocument();
@@ -52,5 +58,12 @@ describe('PageHeroBanner', () => {
       />
     );
     expect(screen.getByText('A collection of my work')).toBeInTheDocument();
+  });
+
+  it('uses the subtler banner rain mode for blog heroes', () => {
+    render(<PageHeroBanner title="Blog" filePath="pages/blog/blog.tsx" visualMode="blog" />);
+    expect(mockBinaryRain).toHaveBeenCalledWith(
+      expect.objectContaining({ variant: 'banner', intensity: 'subtle' })
+    );
   });
 });

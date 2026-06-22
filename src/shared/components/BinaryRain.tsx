@@ -2,9 +2,11 @@ import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import useRafMousemove from '../hooks/useRafMousemove';
 
 interface BinaryRainProps {
   variant?: 'default' | 'banner';
+  intensity?: 'default' | 'subtle';
 }
 
 const CanvasWrapper = styled(Box, {
@@ -30,14 +32,34 @@ const CanvasWrapper = styled(Box, {
       }
 );
 
-const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
+const BinaryRain = ({ variant = 'default', intensity = 'default' }: BinaryRainProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseColRef = useRef(-999);
   const rafRef = useRef<number>(0);
+  const boundsRef = useRef<DOMRect | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const rainColor = theme.palette.custom.splash.binaryColor;
   const accentColor = theme.palette.custom.orangePalette.background;
+
+  useRafMousemove((e) => {
+    const rect = boundsRef.current;
+    if (!rect) {
+      return;
+    }
+
+    if (
+      e.clientX < rect.left
+      || e.clientX > rect.right
+      || e.clientY < rect.top
+      || e.clientY > rect.bottom
+    ) {
+      mouseColRef.current = -999;
+      return;
+    }
+
+    mouseColRef.current = Math.floor((e.clientX - rect.left) / 13);
+  }, true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,19 +69,20 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
 
     let cols: number;
     let drops: number[];
+    const fontSize = intensity === 'subtle' ? 15 : 13;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
+      boundsRef.current = canvas.getBoundingClientRect();
       cols = Math.floor(canvas.width / fontSize);
       drops = Array(cols).fill(1);
     };
 
-    const fontSize = 13;
     resize();
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(7, 7, 15, 0.08)';
+      ctx.fillStyle = intensity === 'subtle' ? 'rgba(7, 7, 15, 0.05)' : 'rgba(7, 7, 15, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.font = `${fontSize}px monospace`;
 
@@ -89,16 +112,13 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
       ctx.globalAlpha = 1;
     };
 
-    const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseColRef.current = Math.floor((e.clientX - rect.left) / fontSize);
-    };
-
     const onMouseLeave = () => {
       mouseColRef.current = -999;
     };
 
-    const targetInterval = isMobile ? 100 : 60;
+    const targetInterval = intensity === 'subtle'
+      ? (isMobile ? 120 : 90)
+      : (isMobile ? 100 : 60);
     let lastTime = 0;
     const animate = (time: number) => {
       if (time - lastTime >= targetInterval) {
@@ -111,16 +131,16 @@ const BinaryRain = ({ variant = 'default' }: BinaryRainProps) => {
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(canvas);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseleave', onMouseLeave);
+    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('mouseleave', onMouseLeave, { passive: true });
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       resizeObserver.disconnect();
-      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('resize', resize);
       window.removeEventListener('mouseleave', onMouseLeave);
     };
-  }, [rainColor, accentColor, isMobile]);
+  }, [rainColor, accentColor, intensity, isMobile]);
 
   return (
     <CanvasWrapper variant={variant}>

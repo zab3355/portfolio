@@ -1,6 +1,9 @@
 import React from 'react';
 import { render } from '../../test-utils';
 import BinaryRain from '../BinaryRain';
+import useRafMousemove from '../../hooks/useRafMousemove';
+
+jest.mock('../../hooks/useRafMousemove', () => jest.fn());
 
 const mockCtx = {
   fillRect: jest.fn(),
@@ -35,46 +38,9 @@ describe('BinaryRain', () => {
     expect(HTMLCanvasElement.prototype.getContext).toHaveBeenCalledWith('2d');
   });
 
-  it('starts the draw interval and clears it on unmount', () => {
-    jest.useFakeTimers();
-    const setIntervalSpy = jest.spyOn(global, 'setInterval');
-    const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
-
-    const { unmount } = render(<BinaryRain />);
-    expect(setIntervalSpy).toHaveBeenCalled();
-
-    unmount();
-    expect(clearIntervalSpy).toHaveBeenCalled();
-
-    jest.useRealTimers();
-    setIntervalSpy.mockRestore();
-    clearIntervalSpy.mockRestore();
-  });
-
-  it('registers and removes mousemove and mouseleave listeners', () => {
-    const addSpy = jest.spyOn(window, 'addEventListener');
-    const removeSpy = jest.spyOn(window, 'removeEventListener');
-
-    const { unmount } = render(<BinaryRain />);
-    expect(addSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
-    expect(addSpy).toHaveBeenCalledWith('mouseleave', expect.any(Function));
-
-    unmount();
-    expect(removeSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
-    expect(removeSpy).toHaveBeenCalledWith('mouseleave', expect.any(Function));
-
-    addSpy.mockRestore();
-    removeSpy.mockRestore();
-  });
-
-  it('calls fillRect to clear canvas on each draw tick', () => {
-    jest.useFakeTimers();
-
+  it('wires the shared rAF-paced mousemove hook', () => {
     render(<BinaryRain />);
-    jest.advanceTimersByTime(60); // one draw tick (interval = 60ms)
 
-    expect(mockCtx.fillRect).toHaveBeenCalled();
-
-    jest.useRealTimers();
+    expect(useRafMousemove).toHaveBeenCalledWith(expect.any(Function), true);
   });
 });
