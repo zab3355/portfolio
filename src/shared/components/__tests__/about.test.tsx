@@ -12,7 +12,7 @@ describe('About', () => {
 
   it('renders the about image with correct alt text', () => {
     render(<About />);
-    expect(screen.getByAltText('Photo of Zach Brown')).toBeInTheDocument();
+    expect(screen.getByAltText('Zach Brown')).toBeInTheDocument();
   });
 
   it('renders all expertise bullet points', () => {

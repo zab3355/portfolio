@@ -10,21 +10,6 @@ jest.mock('./shared/components/GradientBackground', () => () => <div data-testid
 jest.mock('./shared/components/CustomCursor', () => () => <div data-testid="custom-cursor" />);
 jest.mock('typewriter-effect', () => () => <span data-testid="typewriter" />);
 
-// Minimal framer-motion mock — no forwardRef to avoid React version conflicts
-jest.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, animate, transition, initial, whileInView, style, ...props }: any) =>
-      React.createElement('div', props, children),
-    span: ({ children, animate, transition, initial, style, ...props }: any) =>
-      React.createElement('span', props, children),
-  },
-  useMotionValue: (init: number) => ({ set: jest.fn(), get: () => init }),
-  useSpring: (v: any) => v,
-  useTransform: () => 1,
-  useVelocity: () => ({ get: jest.fn(() => 0) }),
-  AnimatePresence: ({ children }: any) => children,
-}));
-
 import App from './App';
 
 describe('App', () => {
