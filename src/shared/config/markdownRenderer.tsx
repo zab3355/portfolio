@@ -1,19 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Box, CircularProgress } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 import { MarkdownRendererProps } from '../types/types';
 
-const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ src, content }) => {
-  const [fetchedContent, setFetchedContent] = useState<string>('');
+// Module-level cache — survives component unmount/remount within the same session.
+// Prevents re-fetching the same markdown file when the user navigates back and reopens a post.
+const markdownCache = new Map<string, string>();
+
+const MarkdownBody = styled('div')({
+  fontFamily: 'inherit',
+  lineHeight: 1.7,
+});
+
+const MarkdownImageWrapper = styled('span')({
+  display: 'block',
+  textAlign: 'center',
+  margin: '1.5rem 0',
+});
+
+const MarkdownImage = styled('img')({
+  maxWidth: '100%',
+  width: '560px',
+  height: 'auto',
+  borderRadius: '8px',
+  display: 'inline-block',
+});
+
+export default function MarkdownRenderer({ src, content }: MarkdownRendererProps) {
+  const [fetchedContent, setFetchedContent] = useState<string>(() =>
+    src ? (markdownCache.get(src) ?? '') : ''
+  );
 
   useEffect(() => {
     if (!src) return;
+    if (markdownCache.has(src)) {
+      setFetchedContent(markdownCache.get(src)!);
+      return;
+    }
 
     let isCancelled = false;
 
     fetch(src)
       .then((res) => res.text())
       .then((text) => {
-        if (!isCancelled) setFetchedContent(text);
+        if (!isCancelled) {
+          markdownCache.set(src, text);
+          setFetchedContent(text);
+        }
       })
       .catch(() => {
         if (!isCancelled) setFetchedContent('Failed to load content.');
@@ -25,35 +59,35 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ src, content }) => 
   }, [src]);
 
   const markdownToRender = src ? fetchedContent : content ?? '';
+  const isLoading = !!src && !fetchedContent;
+  const theme = useTheme();
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+        <CircularProgress size={40} sx={{ color: theme.palette.custom.orangePalette.background }} />
+      </Box>
+    );
+  }
 
   return (
-    <div
-      className="markdown-body"
-      style={{ fontFamily: 'inherit', lineHeight: 1.7 }}
-    >
+    <MarkdownBody className="markdown-body">
       <ReactMarkdown
         components={{
           img: ({ src, alt }) => (
-            <span style={{ display: 'block', textAlign: 'center', margin: '1.5rem 0' }}>
-              <img
+            <MarkdownImageWrapper>
+              <MarkdownImage
                 src={src}
                 alt={alt ?? ''}
-                style={{
-                  maxWidth: '100%',
-                  width: '560px',
-                  height: 'auto',
-                  borderRadius: '8px',
-                  display: 'inline-block',
-                }}
+                loading="lazy"
+                decoding="async"
               />
-            </span>
+            </MarkdownImageWrapper>
           ),
         }}
       >
         {markdownToRender}
       </ReactMarkdown>
-    </div>
+    </MarkdownBody>
   );
-};
-
-export default MarkdownRenderer;
+}

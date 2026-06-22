@@ -44,3 +44,25 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+---
+
+## CI/CD Pipeline
+
+[![CI/CD](https://github.com/zab3355/portfolio/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/zab3355/portfolio/actions/workflows/ci-cd.yml)
+
+This project validates on every push and pull request, and deploys to production on `main` push after validation passes.
+
+### Checks
+
+- **Frontend Build**: Build React app with TypeScript
+- **Frontend Tests**: Jest and React Testing Library
+- **Frontend Lint**: ESLint code quality checks
+- **Backend Build**: Build Node.js TypeScript server
+- **Deploy**: Automatic deployment to server on `main` push
+
+### Manual Trigger
+
+You can manually run checks without pushing by going to [GitHub Actions](https://github.com/zab3355/portfolio/actions/workflows/ci-cd.yml) and clicking "Run workflow".
+
+For details, see the [CI/CD Deployment Guide](../../CI-CD-DEPLOYMENT.md).

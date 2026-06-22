@@ -12,10 +12,12 @@ import { ThemeProviderWrapper } from './context/ThemeContext';
 import { mindexConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
 import { miseData, nbcUniversalData } from './data/projectData';
 import CustomCursor from './shared/components/CustomCursor';
+import PageLoader from './shared/components/PageLoader';
 
 const Home = lazy(() => import('./pages/Home'));
 const Portfolio = lazy(() => import('./pages/Portfolio'));
 const Blog = lazy(() => import('./pages/blog/blog'));
+const BlogDetail = lazy(() => import('./pages/blog/blogDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const WorkTemplate = lazy(() => import('./pages/work/workTemplate'));
 const ProjectTemplate = lazy(() => import('./pages/work/ProjectTemplate'));
@@ -34,12 +36,13 @@ const App = () => {
         <CssBaseline />
         <BrowserRouter>
           <Navbar onThemeChange={handleThemeChange} isDarkMode={isDarkMode} />
-          <Suspense fallback={null}>
+          <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="portfolio" element={<Portfolio />} />
                 <Route path="blog" element={<Blog />} />
+                <Route path="blog/:slug" element={<BlogDetail />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="/nbcUniversal" element={<ProjectTemplate {...nbcUniversalData} />} />
                 <Route path="/mindex" element={<WorkTemplate {...mindexConstants} />} />

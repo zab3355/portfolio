@@ -5,3 +5,7 @@ yarn.lock
 .env
 .env.*
 build/
+.pem
+*.key
+deploy_key*
+secrets/

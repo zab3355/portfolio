@@ -5,6 +5,7 @@ import { BlogPost } from '../shared/types/types';
 
 const blogPosts: BlogPost[] = [
   {
+    slug: 'react-compiler',
     img: reactCompilerImage,
     tag: 'Engineering',
     title: 'The Future of the React Compiler',
@@ -22,6 +23,7 @@ const blogPosts: BlogPost[] = [
     ],
   },
   {
+    slug: 'engineering-leadership',
     img: bannerImage,
     tag: 'Leadership',
     title: 'Engineering Leadership: The Shift from Writing Code to Leading Systems',
@@ -39,6 +41,7 @@ const blogPosts: BlogPost[] = [
     ],
   },
   {
+    slug: 'gopro-ski-season',
     img: skiingImage,
     tag: 'Photography',
     title: 'GoPro Ski Season Compilation',
