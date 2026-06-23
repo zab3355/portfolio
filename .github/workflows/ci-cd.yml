@@ -42,7 +42,7 @@ jobs:
         run: npm test -- --watchAll=false --coverage --passWithNoTests
 
       - name: Lint frontend
-        run: npx eslint src --ext .ts,.tsx,.js,.jsx
+        run: npm run lint
 
   validate-backend:
     name: Validate backend
