@@ -4,6 +4,7 @@ node_modules
 yarn.lock
 .env
 .env.*
+!.env.production
 build/
 .pem
 *.key
