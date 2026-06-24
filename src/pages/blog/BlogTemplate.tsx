@@ -53,7 +53,7 @@ export default function BlogTemplate({
   const allYoutube = media.length > 0 && media.every(m => m.type === 'youtube');
 
   return (
-    <Box>
+    <Box sx={{ pt: { xs: '86px', sm: '96px' } }}>
       {/* Hero image only — stays at top */}
       {heroMedia && heroMedia.type === 'image' && (
         <Box sx={{ width: '100%', maxHeight: 420, overflow: 'hidden', borderRadius: 2, mb: 3 }}>
