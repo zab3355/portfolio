@@ -1,7 +1,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import { ref, push } from 'firebase/database';
-import { database } from '../../firebase/firebaseConfig';
+import { getFirebaseDatabase } from '../../firebase/firebaseConfig';
 import { ContactFormData } from '../types/types';
 import emailjs from '@emailjs/browser';
 
@@ -30,12 +30,15 @@ export default function useContactForm() {
   });
 
   const submitForm: SubmitHandler<ContactFormData> = async (data) => {
-    // 1) Store in Firebase
-    const messagesRef = ref(database, 'messages');
-    await push(messagesRef, {
-      ...data,
-      timestamp: new Date().toISOString(),
-    });
+    // 1) Store in Firebase (only when configured)
+    const db = getFirebaseDatabase();
+    if (db) {
+      const messagesRef = ref(db, 'messages');
+      await push(messagesRef, {
+        ...data,
+        timestamp: new Date().toISOString(),
+      });
+    }
 
     // 2) Send email notification via EmailJS (if configured with real credentials)
     const emailjsReady = EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY
