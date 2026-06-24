@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { styled, useMediaQuery, useTheme } from '@mui/system';
 import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
 import SectionHeader from '../../shared/components/sectionHeader';
+import { useAppLoad } from '../../context/AppLoadContext';
 
 interface WorkTemplateProps {
   title: string;
@@ -72,6 +74,8 @@ const renderMedia = (src: string, alt: string) =>
 const WorkTemplate = ({ title, title2, description, images, videoHeaderUrl, titleSection2, descriptionSection2, titleSection3, descriptionSection3, titleSection4, descriptionSection4, descriptionSectionFull }: WorkTemplateProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { setAppReady } = useAppLoad();
+  useEffect(() => { setAppReady(); }, [setAppReady]);
 
   const expandImage = (image?: string) => {
     if (!image?.endsWith('.webm')) window.open(image, '_blank');

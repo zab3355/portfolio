@@ -12,7 +12,8 @@ import { ThemeProviderWrapper } from './context/ThemeContext';
 import { mindexConstants, sandboxUnionConstants, theShoreConstants, weatherWatcherConstants, wegmansConstants, OsmoseConstants, SiConstants } from './shared/constants/constants';
 import { miseData, nbcUniversalData } from './data/projectData';
 import CustomCursor from './shared/components/CustomCursor';
-import PageLoader from './shared/components/PageLoader';
+import AppLoader from './shared/components/AppLoader';
+import { AppLoadProvider } from './context/AppLoadContext';
 
 const Home = lazy(() => import('./pages/Home'));
 const Portfolio = lazy(() => import('./pages/Portfolio'));
@@ -35,9 +36,11 @@ const App = () => {
       <ThemeProviderWrapper>
         <CssBaseline />
         <BrowserRouter>
-          <Navbar onThemeChange={handleThemeChange} isDarkMode={isDarkMode} />
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
+          <AppLoadProvider>
+            <AppLoader />
+            <Navbar onThemeChange={handleThemeChange} isDarkMode={isDarkMode} />
+            <Suspense fallback={null}>
+              <Routes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="portfolio" element={<Portfolio />} />
@@ -56,6 +59,7 @@ const App = () => {
               </Route>
             </Routes>
           </Suspense>
+          </AppLoadProvider>
         </BrowserRouter>
         <Footer />
       </ThemeProviderWrapper>

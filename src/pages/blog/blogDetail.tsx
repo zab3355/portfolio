@@ -1,14 +1,17 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography } from "@mui/material";
 import blogPosts from '../../data/blogPosts';
 import BlogTemplate from "./BlogTemplate";
 import MarkdownRenderer from "../../shared/config/markdownRenderer";
 import CircleButton from "../../shared/components/circleButton";
+import { useAppLoad } from '../../context/AppLoadContext';
 
 export default function BlogDetail() {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const { setAppReady } = useAppLoad();
+    useEffect(() => { setAppReady(); }, [setAppReady]);
     const handleBackToBlog = useCallback(() => {
         navigate('/blog');
     }, [navigate]);

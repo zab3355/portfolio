@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppLoad } from '../context/AppLoadContext';
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CircleButton from '../shared/components/circleButton';
@@ -62,6 +63,9 @@ const Home = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const accent = theme.palette.custom.orangePalette.background;
+  const { setAppReady } = useAppLoad();
+
+  useEffect(() => { setAppReady(); }, [setAppReady]);
 
   const [scrollHovered, setScrollHovered] = useState(false);
 

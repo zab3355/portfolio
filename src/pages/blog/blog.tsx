@@ -1,10 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Box, Grid2 as Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import blogPosts from '../../data/blogPosts';
 import BlogPostCard from './blogPostcard';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
+import { useAppLoad } from '../../context/AppLoadContext';
 
 const BlogRoot = styled(Box)({
   display: 'flex',
@@ -23,6 +24,8 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 
 export default function Blog() {
   const navigate = useNavigate();
+  const { setAppReady } = useAppLoad();
+  useEffect(() => { setAppReady(); }, [setAppReady]);
   const handleOpenPost = useCallback((slug: string) => {
     navigate(`/blog/${slug}`);
   }, [navigate]);

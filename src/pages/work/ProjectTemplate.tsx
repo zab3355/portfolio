@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { Box, List, ListItem, Typography, useMediaQuery } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
 import SectionHeader from '../../shared/components/sectionHeader';
 import { ProjectData } from '../../data/projectData';
+import { useAppLoad } from '../../context/AppLoadContext';
 
 const AnimationContainer = styled(Box)({
   animation: 'fadeIn 1s',
@@ -73,6 +75,8 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { setAppReady } = useAppLoad();
+  useEffect(() => { setAppReady(); }, [setAppReady]);
 
   const expandImage = (src?: string) => {
     if (src) window.open(src, '_blank');
