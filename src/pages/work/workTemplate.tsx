@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box, List, ListItem, Typography } from '@mui/material';
+import { Box, List, ListItem } from '@mui/material';
 import { useMediaQuery, useTheme } from '@mui/system';
 import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';

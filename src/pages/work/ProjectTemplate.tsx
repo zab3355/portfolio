@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Box, List, ListItem, Typography } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
 import SectionHeader from '../../shared/components/sectionHeader';
@@ -104,7 +104,6 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
   sections,
   closingText,
 }) => {
-  const theme = useTheme();
   const { setAppReady } = useAppLoad();
   useEffect(() => { setAppReady(); }, [setAppReady]);
 
