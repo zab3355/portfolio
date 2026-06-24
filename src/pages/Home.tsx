@@ -49,6 +49,75 @@ const ScrollIndicator = styled(Box)({
   cursor: 'pointer',
 });
 
+const ShimmerHeading = styled('h1')(({ theme }) => ({
+  fontFamily: 'Poppins',
+  fontWeight: 700,
+  fontSize: '75px',
+  margin: 0,
+  lineHeight: 1.1,
+  display: 'flex',
+  width: '100%',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  background: `linear-gradient(135deg, #ffffff 30%, ${theme.palette.custom.orangePalette.background} 60%, #ffffff 90%)`,
+  backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundSize: '200% auto',
+  animation: 'shimmer 4s linear infinite',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '32px',
+  },
+}));
+
+const TypewriterWrapper = styled(Box)(({ theme }) => ({
+  fontSize: '28px',
+  color: 'rgba(255,255,255,0.85)',
+  fontFamily: 'Poppins',
+  marginTop: theme.spacing(2),
+  minHeight: '2em',
+  '& .Typewriter__cursor': {
+    color: theme.palette.custom.orangePalette.background,
+    fontWeight: 300,
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '22px',
+  },
+}));
+
+const ScrollLine = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$hovered',
+})<{ $hovered: boolean }>(({ theme, $hovered }) => ({
+  width: '1px',
+  height: '60px',
+  backgroundColor: $hovered ? theme.palette.custom.orangePalette.background : 'rgba(255,255,255,0.2)',
+  boxShadow: $hovered ? `0 0 10px ${theme.palette.custom.orangePalette.background}, 0 0 20px ${theme.palette.custom.orangePalette.background}55` : 'none',
+  position: 'relative',
+  overflow: 'hidden',
+  transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+}));
+
+const ScrollBead = styled(motion.div)(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  left: '-1px',
+  width: '3px',
+  height: '20px',
+  borderRadius: '2px',
+  backgroundColor: theme.palette.custom.orangePalette.background,
+}));
+
+const ScrollLabel = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== '$hovered',
+})<{ $hovered: boolean }>(({ theme, $hovered }) => ({
+  fontSize: '10px',
+  color: $hovered ? theme.palette.custom.orangePalette.background : 'rgba(255,255,255,0.4)',
+  letterSpacing: '0.15em',
+  textTransform: 'uppercase',
+  fontFamily: 'Poppins',
+  transition: 'color 0.3s ease',
+}));
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.4, staggerChildren: 0.045 } },
@@ -62,7 +131,6 @@ const letterVariants = {
 const Home = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const accent = theme.palette.custom.orangePalette.background;
   const { setAppReady } = useAppLoad();
 
   useEffect(() => { setAppReady(); }, [setAppReady]);
@@ -76,9 +144,6 @@ const Home = () => {
 
   const nameLetters = useMemo(() => splashText.title.split(''), []);
 
-  const headingSize = isMobile ? '32px' : '75px';
-  const typewriterSize = isMobile ? '22px' : '28px';
-
   return (
     <div>
       <SplashContainer>
@@ -90,48 +155,15 @@ const Home = () => {
           initial="hidden"
           animate="visible"
         >
-          {/* Staggered name with gradient shimmer */}
-          <Box
-            component="h1"
-            sx={{
-              fontFamily: 'Poppins',
-              fontWeight: 700,
-              fontSize: headingSize,
-              margin: 0,
-              lineHeight: 1.1,
-              display: 'flex',
-              width: '100%',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              background: `linear-gradient(135deg, #ffffff 30%, ${accent} 60%, #ffffff 90%)`,
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundSize: '200% auto',
-              animation: 'shimmer 4s linear infinite',
-            }}
-          >
+          <ShimmerHeading>
             {nameLetters.map((char, i) => (
               <motion.span key={i} variants={letterVariants} style={{ display: 'inline-block' }}>
                 {char === ' ' ? '\u00A0' : char}
               </motion.span>
             ))}
-          </Box>
+          </ShimmerHeading>
 
-          {/* Typewriter subtitle */}
-          <Box
-            sx={{
-              fontSize: typewriterSize,
-              color: 'rgba(255,255,255,0.85)',
-              fontFamily: 'Poppins',
-              mt: 2,
-              minHeight: '2em',
-              '& .Typewriter__cursor': {
-                color: accent,
-                fontWeight: 300,
-              },
-            }}
-          >
+          <TypewriterWrapper>
             <Typewriter
               options={{
                 strings: splashText.typewriterTexts,
@@ -140,14 +172,13 @@ const Home = () => {
                 cursor: '|',
               }}
             />
-          </Box>
+          </TypewriterWrapper>
 
           <ViewProjectBox>
             <CircleButton onClick={handleScroll}>View Projects</CircleButton>
           </ViewProjectBox>
         </ContentContainer>
 
-        {/* Scroll indicator — glows orange on hover */}
         <ScrollIndicator
           onClick={handleScroll}
           onMouseEnter={() => setScrollHovered(true)}
@@ -157,43 +188,13 @@ const Home = () => {
           tabIndex={0}
           aria-label="Scroll to projects"
         >
-          <Box
-            sx={{
-              width: '1px',
-              height: '60px',
-              backgroundColor: scrollHovered ? accent : 'rgba(255,255,255,0.2)',
-              boxShadow: scrollHovered ? `0 0 10px ${accent}, 0 0 20px ${accent}55` : 'none',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-            }}
-          >
-            <motion.div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: '-1px',
-                width: '3px',
-                height: '20px',
-                borderRadius: '2px',
-                backgroundColor: accent,
-              }}
+          <ScrollLine $hovered={scrollHovered}>
+            <ScrollBead
               animate={{ y: [0, 40, 0] }}
               transition={{ duration: scrollHovered ? 0.7 : 1.6, repeat: Infinity, ease: 'easeInOut' }}
             />
-          </Box>
-          <Typography
-            sx={{
-              fontSize: '10px',
-              color: scrollHovered ? accent : 'rgba(255,255,255,0.4)',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              fontFamily: 'Poppins',
-              transition: 'color 0.3s ease',
-            }}
-          >
-            scroll
-          </Typography>
+          </ScrollLine>
+          <ScrollLabel $hovered={scrollHovered}>scroll</ScrollLabel>
         </ScrollIndicator>
       </SplashContainer>
       <Projects />

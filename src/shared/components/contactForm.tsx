@@ -72,7 +72,7 @@ const SendMessageButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 
-const SectionDivider = styled(Box)(() => ({
+const SectionDivider = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   marginBottom: 32,
@@ -85,7 +85,7 @@ const SectionDivider = styled(Box)(() => ({
     width: 12,
     height: 12,
     borderRadius: '50%',
-    backgroundColor: '#e45447',
+    backgroundColor: theme.palette.custom.primary.main,
   },
   '&::after': {
     content: '""',
@@ -93,7 +93,7 @@ const SectionDivider = styled(Box)(() => ({
     left: 12,
     width: 150,
     height: 2,
-    backgroundColor: '#e45447',
+    backgroundColor: theme.palette.custom.primary.main,
   },
 }));
 

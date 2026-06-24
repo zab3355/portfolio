@@ -5,7 +5,6 @@ import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { projectText, projectBoxes } from '../constants/constants';
 
-// All styled components defined OUTSIDE the component — created once, not on every render
 
 const BoxesContainer = styled(Box)(({ theme }) => ({
   display: 'grid',
@@ -56,16 +55,15 @@ const HoveredBoxTitle = styled(Typography)(({ theme }) => ({
 
 interface FiltersContainerProps {
   isMobile: boolean;
-  accentColor: string;
 }
 
 const FiltersContainer = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'isMobile' && prop !== 'accentColor',
-})<FiltersContainerProps>(({ isMobile, accentColor }) => ({
+  shouldForwardProp: (prop) => prop !== 'isMobile',
+})<FiltersContainerProps>(({ theme, isMobile }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: accentColor,
+  backgroundColor: theme.palette.custom.orangePalette.background,
   padding: isMobile ? '10px 6px' : '12px 134px',
   borderBottom: '8px solid wheat',
   margin: '50px auto',
@@ -120,6 +118,43 @@ const FilterButton = styled(Typography, {
   },
 }));
 
+const SectionTitle = styled(Typography)(({ theme }) => ({
+  fontFamily: 'Poppins',
+  fontWeight: 700,
+  textAlign: 'center',
+  fontSize: '60px',
+  marginBottom: theme.spacing(0.5),
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '30px',
+  },
+}));
+
+const AccentRow = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 16,
+});
+
+const AccentDot = styled(Box)(({ theme }) => ({
+  width: 12,
+  height: 12,
+  position: 'absolute',
+  borderRadius: '50%',
+  backgroundColor: theme.palette.custom.orangePalette.background,
+}));
+
+const AccentLine = styled(Box)(({ theme }) => ({
+  width: 150,
+  height: 2,
+  backgroundColor: theme.palette.custom.orangePalette.background,
+}));
+
+const SectionTitleWrapper = styled(Box)({
+  marginTop: '80px',
+  marginBottom: '30px',
+});
+
 const Projects = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -130,26 +165,17 @@ const Projects = () => {
 
   return (
     <Box>
-      <Box sx={{ mt: '80px', mb: '30px' }}>
-        <Typography
-          variant="h1"
-          sx={{
-            fontFamily: 'Poppins',
-            fontWeight: 700,
-            textAlign: 'center',
-            fontSize: isMobile ? '30px' : '60px',
-            mb: 0.5,
-          }}
-        >
+      <SectionTitleWrapper>
+        <SectionTitle variant="h1">
           {projectText.title}
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 2,mb: 0 }}>
-          <Box sx={{ width: 12, height: 12, position: 'absolute', borderRadius: '50%', backgroundColor: theme.palette.custom.orangePalette.background }} />
-          <Box sx={{ width: 150, height: 2, backgroundColor: theme.palette.custom.orangePalette.background }} />
-        </Box>
-      </Box>
+        </SectionTitle>
+        <AccentRow>
+          <AccentDot />
+          <AccentLine />
+        </AccentRow>
+      </SectionTitleWrapper>
 
-      <FiltersContainer isMobile={isMobile} accentColor={theme.palette.custom.orangePalette.background}>
+      <FiltersContainer isMobile={isMobile}>
         <FilterButton
           selected={filter === 'Work'}
           onClick={() => setFilter('Work')}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { Box, List, ListItem, Typography, useMediaQuery } from '@mui/material';
+import { Box, List, ListItem, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import ReactPlayer from 'react-player/youtube';
 import PageHeroBanner from '../../shared/components/PageHeroBanner';
@@ -50,6 +50,18 @@ const BulletText = styled(Typography)({
   fontSize: '16px',
 });
 
+const SmallBulletText = styled(BulletText)({
+  fontSize: '14px',
+});
+
+const FullWidthSection = styled(Box)(({ theme }) => ({
+  width: '94%',
+  margin: '3rem auto',
+  [theme.breakpoints.down('sm')]: {
+    margin: '1.5rem auto',
+  },
+}));
+
 const ProjectImage = styled('img')({
   width: '100%',
   height: 'auto',
@@ -61,6 +73,25 @@ const ProjectImage = styled('img')({
     boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
   },
 });
+
+interface SectionBodyContentProps {
+  body: string | string[];
+}
+
+const SectionBodyContent = ({ body }: SectionBodyContentProps) => {
+  if (Array.isArray(body)) {
+    return (
+      <List sx={{ pl: 4, listStyleType: 'disc' }}>
+        {body.map((item, i) => (
+          <ListItem key={i} sx={{ display: 'list-item', pl: 2 }}>
+            <SmallBulletText dangerouslySetInnerHTML={{ __html: item }} />
+          </ListItem>
+        ))}
+      </List>
+    );
+  }
+  return <BodyText>{body}</BodyText>;
+};
 
 type ProjectTemplateProps = ProjectData;
 
@@ -74,7 +105,6 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
   closingText,
 }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { setAppReady } = useAppLoad();
   useEffect(() => { setAppReady(); }, [setAppReady]);
 
@@ -92,9 +122,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
         subtitle={subtitle}
       />
 
-      {/* ── Overview section ───────────────────────────────────────── */}
       <SectionRow>
-        {/* Hero media — LEFT */}
         {hasHeroMedia && (
           <ImageContainer>
             {videoUrl ? (
@@ -110,7 +138,6 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
           </ImageContainer>
         )}
 
-        {/* Overview bullets — RIGHT */}
         <TextContainer>
           <SectionHeader title={subtitle} />
           <List sx={{ pl: 4, listStyleType: 'disc' }}>
@@ -123,29 +150,14 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
         </TextContainer>
       </SectionRow>
 
-      {/* ── Additional sections (alternating layout) ───────────────── */}
       {sections?.map((section, idx) => {
-        // sections[0] → image RIGHT, sections[1] → image LEFT, etc.
         const imageOnLeft = idx % 2 !== 0;
         const hasMedia = !!(section.image || section.videoUrl);
 
         const textBlock = (
           <TextContainer>
             {section.title && <SectionHeader title={section.title} />}
-            {Array.isArray(section.body) ? (
-              <List sx={{ pl: 4, listStyleType: 'disc' }}>
-                {section.body.map((item, i) => (
-                  <ListItem key={i} sx={{ display: 'list-item', pl: 2 }}>
-                    <BulletText
-                      sx={{ fontSize: '14px' }}
-                      dangerouslySetInnerHTML={{ __html: item }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <BodyText>{section.body}</BodyText>
-            )}
+            <SectionBodyContent body={section.body} />
           </TextContainer>
         );
 
@@ -164,12 +176,11 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
           </ImageContainer>
         ) : null;
 
-        // When no image, render text full-width
         if (!hasMedia) {
           return (
-            <Box key={idx} sx={{ width: '94%', margin: isMobile ? '1.5rem auto' : '3rem auto' }}>
+            <FullWidthSection key={idx}>
               {textBlock}
-            </Box>
+            </FullWidthSection>
           );
         }
 
@@ -190,11 +201,10 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
         );
       })}
 
-      {/* ── Closing paragraph ──────────────────────────────────────── */}
       {closingText && (
-        <Box sx={{ width: '94%', margin: isMobile ? '1.5rem auto' : '3rem auto' }}>
-          <BodyText sx={{ m: '1rem' }}>{closingText}</BodyText>
-        </Box>
+        <FullWidthSection>
+          <BodyText>{closingText}</BodyText>
+        </FullWidthSection>
       )}
     </AnimationContainer>
   );
