@@ -78,7 +78,7 @@ const Footer = () => {
           </FooterIconButton>
         </FooterIconLink>
 
-        <FooterIconLink href="mailto:zab3355@gmail.com" aria-label="Email">
+        <FooterIconLink href="mailto:me@zabrown.com" aria-label="Email">
           <FooterIconButton>
             <EmailIcon fontSize="inherit" />
           </FooterIconButton>
