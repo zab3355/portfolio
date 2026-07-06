@@ -2,7 +2,6 @@ import { Box, IconButton, styled } from '@mui/material';
 import { ReactComponent as Logo } from '../assets/icons/logo.svg';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import EmailIcon from '@mui/icons-material/Email';
 
 const FooterContainer = styled('footer')(({ theme }) => ({
   width: '100%',
@@ -32,6 +31,11 @@ const FooterIconButton = styled(IconButton)(({ theme }) => ({
   '&:hover, &:focus-visible': {
     color: theme.palette.custom.orangePalette.background,
     transform: 'scale(1.05)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    '&:hover, &:focus-visible': {
+      color: theme.palette.common.black,
+    },
   },
 }));
 
@@ -75,12 +79,6 @@ const Footer = () => {
         >
           <FooterIconButton>
             <GitHubIcon fontSize="inherit" />
-          </FooterIconButton>
-        </FooterIconLink>
-
-        <FooterIconLink href="mailto:me@zabrown.com" aria-label="Email">
-          <FooterIconButton>
-            <EmailIcon fontSize="inherit" />
           </FooterIconButton>
         </FooterIconLink>
       </Box>
