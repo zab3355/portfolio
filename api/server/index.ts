@@ -27,6 +27,8 @@ app.get("/api/health", (_req, res) => {
 
 app.post("/api/contact", async (req, res) => {
   const { name, email, subject, message } = req.body || {};
+  const fromAddress = process.env.SMTP_FROM || "me@zabrown.com";
+  const toAddress = process.env.CONTACT_TO_EMAIL || fromAddress;
 
   if (!name || !email || !subject || !message) {
     return res
@@ -46,8 +48,8 @@ app.post("/api/contact", async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.SMTP_FROM}>`,
-      to: process.env.CONTACT_TO_EMAIL,
+      from: `"Portfolio Contact" <${fromAddress}>`,
+      to: toAddress,
       replyTo: email,
       subject: subject || "New contact form message",
       text: `From: ${name} <${email}>\n\n${message}`
