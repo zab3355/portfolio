@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { ref, push } from 'firebase/database';
 import { getFirebaseDatabase } from '../../firebase/firebaseConfig';
@@ -29,7 +29,7 @@ export default function useContactForm() {
     },
   });
 
-  const submitForm: SubmitHandler<ContactFormData> = async (data) => {
+  const submitForm = async (data: ContactFormData, turnstileToken: string) => {
     // 1) Store in Firebase (only when configured)
     const db = getFirebaseDatabase();
     if (db) {
@@ -65,18 +65,14 @@ export default function useContactForm() {
 
     // 3) Send to backend API (only if API_BASE is configured — skipped on localhost)
     if (API_BASE) {
-      try {
-        const res = await fetch(`${API_BASE}/api/contact`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!res.ok) {
-          const body = await res.json().catch(() => null);
-          console.warn('Backend API contact endpoint failed:', body?.message || res.status);
-        }
-      } catch (err) {
-        console.warn('Backend API contact endpoint unreachable:', err);
+      const res = await fetch(`${API_BASE}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, turnstileToken }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.message || 'Failed to send message.');
       }
     }
 

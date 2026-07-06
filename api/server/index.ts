@@ -26,7 +26,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.post("/api/contact", async (req, res) => {
-  const { name, email, subject, message } = req.body || {};
+  const { name, email, subject, message, turnstileToken } = req.body || {};
   const fromAddress = process.env.SMTP_FROM || "me@zabrown.com";
   const toAddress = process.env.CONTACT_TO_EMAIL || fromAddress;
 
@@ -34,6 +34,28 @@ app.post("/api/contact", async (req, res) => {
     return res
       .status(400)
       .json({ success: false, message: "All fields are required." });
+  }
+
+  if (!turnstileToken) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Captcha verification failed." });
+  }
+
+  const verifyParams = new URLSearchParams({
+    secret: process.env.TURNSTILE_SECRET_KEY || "",
+    response: turnstileToken,
+    remoteip: req.ip || "",
+  });
+  const verifyRes = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    { method: "POST", body: verifyParams }
+  );
+  const verifyBody = await verifyRes.json();
+  if (!verifyBody.success) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Captcha verification failed." });
   }
 
   try {

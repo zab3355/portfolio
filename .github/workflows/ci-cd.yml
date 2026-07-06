@@ -105,6 +105,7 @@ jobs:
           push: true
           build-args: |
             REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+            REACT_APP_TURNSTILE_SITE_KEY=${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }}
           tags: |
             ghcr.io/zab3355/portfolio-ui:latest
             ghcr.io/zab3355/portfolio-ui:sha-${{ github.sha }}

@@ -10,6 +10,8 @@ WORKDIR /app
 # API URL varies per environment; Firebase config lives in .env.production (public values)
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ARG REACT_APP_TURNSTILE_SITE_KEY
+ENV REACT_APP_TURNSTILE_SITE_KEY=$REACT_APP_TURNSTILE_SITE_KEY
 ENV DISABLE_ESLINT_PLUGIN=true
 
 # Install frontend deps

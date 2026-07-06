@@ -12,10 +12,13 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { Controller } from 'react-hook-form';
+import { Turnstile } from '@marsidev/react-turnstile';
 import useContactForm from '../hooks/useContactForm';
 import { contactForm, contactText } from '../constants/constants';
 import { useState } from 'react';
 import { ContactFormData } from '../types/types';
+
+const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY || '';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -113,16 +116,22 @@ export default function ContactForm() {
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileWidgetKey, setTurnstileWidgetKey] = useState(0);
 
   const handleFormSubmit = async (data: ContactFormData) => {
+    if (!turnstileToken) return;
     setError(null);
     try {
-      await submitForm(data);
+      await submitForm(data, turnstileToken);
       setSuccess(true);
     } catch (err) {
       const msg =
         err instanceof Error ? err.message : contactForm.errorMessage;
       setError(msg);
+    } finally {
+      setTurnstileToken(null);
+      setTurnstileWidgetKey((key) => key + 1);
     }
   };
 
@@ -225,10 +234,22 @@ export default function ContactForm() {
 
               <Grid item xs={12}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Turnstile
+                    key={turnstileWidgetKey}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onSuccess={setTurnstileToken}
+                    onExpire={() => setTurnstileToken(null)}
+                    onError={() => setTurnstileToken(null)}
+                  />
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <SendMessageButton
                     type="submit"
                     variant="contained"
-                    disabled={!isValid || isSubmitting}
+                    disabled={!isValid || isSubmitting || !turnstileToken}
                     fullWidth={isMobile}
                   >
                     {isSubmitting ? 'Sending…' : 'Send Message'}
