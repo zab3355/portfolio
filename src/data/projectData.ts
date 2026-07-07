@@ -1,5 +1,10 @@
-// Hero images (grid thumbnails)
+// NBCUniversal section images
 import nbcUniImage from '../assets/images/nbcuniversal.jpg';
+import nbc0 from '../assets/images/projects/nbc0.png';
+import nbc1 from '../assets/images/projects/nbc1.webp';
+import nbc2 from '../assets/images/projects/nbc2.png';
+import nbc3 from '../assets/images/projects/nbc3.png';
+
 import constructionImage from '../assets/images/construction.png';
 import miseBannerSvg from '../assets/images/mise-banner.svg';
 
@@ -89,7 +94,7 @@ export const nbcUniversalData: ProjectData = {
         'Partner with executive leadership, VP-level stakeholders, QA teams, and product managers to align engineering efforts with delivery timelines per business requirements.',
         'Mentor junior and mid-level engineers on architecture decisions, code quality standards, and best practices; conducted 15+ technical interviews for team expansion.',
       ],
-      image: constructionImage,
+      image: nbc0,
       imageAlt: 'NBCUniversal Engineering — placeholder, replace with screenshot',
     },
     {
@@ -102,7 +107,7 @@ export const nbcUniversalData: ProjectData = {
         'Engineered notification system integrating SmtpClient class with Slack and Microsoft Teams based on user preference management.',
         '<strong>Impact:</strong> Eliminated legacy AngularJS/SQL Server dependency; improved search performance 10x; enabled seamless spinoff of 40% of user base.',
       ],
-      image: constructionImage,
+      image: nbc1,
       imageAlt: 'DALI application — placeholder, replace with screenshot',
     },
     {
@@ -115,7 +120,7 @@ export const nbcUniversalData: ProjectData = {
         'Built AWS Lambda serverless APIs with DynamoDB backend; leveraged VPC endpoints, IAM policies, and EC2 instances prioritizing scalability and security.',
         '<strong>Recognition:</strong> Selected as organization-wide reference architecture for modern web applications.',
       ],
-      image: constructionImage,
+      image: nbc2,
       imageAlt: 'MAP scheduling interface — placeholder, replace with screenshot',
     },
     {
@@ -128,7 +133,7 @@ export const nbcUniversalData: ProjectData = {
         'Executed MySQL 5.6 to 8.0 upgrade, significantly improving database transaction performance.',
         '<strong>Impact:</strong> Streamlined live broadcast setup for producers; eliminated scheduling conflicts and reduced amount of time required for production.',
       ],
-      image: constructionImage,
+      image: nbc3,
       imageAlt: 'LSM control room interface — placeholder, replace with screenshot',
     },
     {
