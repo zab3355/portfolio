@@ -38,6 +38,30 @@ const TextContainer = styled(Box)({
   flex: 1,
 });
 
+interface OrderedProps {
+  imageOnLeft: boolean;
+}
+
+const shouldForwardProp = (prop: PropertyKey) => prop !== 'imageOnLeft';
+
+const SectionImageContainer = styled(ImageContainer, { shouldForwardProp })<OrderedProps>(
+  ({ theme, imageOnLeft }) => ({
+    order: 1,
+    [theme.breakpoints.up('sm')]: {
+      order: imageOnLeft ? 0 : 1,
+    },
+  })
+);
+
+const SectionTextContainer = styled(TextContainer, { shouldForwardProp })<OrderedProps>(
+  ({ theme, imageOnLeft }) => ({
+    order: 0,
+    [theme.breakpoints.up('sm')]: {
+      order: imageOnLeft ? 1 : 0,
+    },
+  })
+);
+
 const BodyText = styled(Typography)({
   fontFamily: 'Poppins',
   fontSize: '14px',
@@ -154,14 +178,14 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
         const hasMedia = !!(section.image || section.videoUrl);
 
         const textBlock = (
-          <TextContainer>
+          <SectionTextContainer imageOnLeft={imageOnLeft}>
             {section.title && <SectionHeader title={section.title} />}
             <SectionBodyContent body={section.body} />
-          </TextContainer>
+          </SectionTextContainer>
         );
 
         const mediaBlock = hasMedia ? (
-          <ImageContainer>
+          <SectionImageContainer imageOnLeft={imageOnLeft}>
             {section.videoUrl ? (
               <ReactPlayer url={section.videoUrl} width="100%" />
             ) : (
@@ -172,7 +196,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
                 onClick={() => expandImage(section.image)}
               />
             )}
-          </ImageContainer>
+          </SectionImageContainer>
         ) : null;
 
         if (!hasMedia) {
@@ -185,17 +209,8 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({
 
         return (
           <SectionRow key={idx}>
-            {imageOnLeft ? (
-              <>
-                {mediaBlock}
-                {textBlock}
-              </>
-            ) : (
-              <>
-                {textBlock}
-                {mediaBlock}
-              </>
-            )}
+            {textBlock}
+            {mediaBlock}
           </SectionRow>
         );
       })}
