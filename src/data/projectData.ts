@@ -1,7 +1,7 @@
 // NBCUniversal section images
 import nbcUniImage from '../assets/images/nbcuniversal.jpg';
 import nbc0 from '../assets/images/projects/nbc0.png';
-import nbc1 from '../assets/images/projects/nbc1.webp';
+import nbc1 from '../assets/images/projects/nbc1.png';
 import nbc2 from '../assets/images/projects/nbc2.png';
 import nbc3 from '../assets/images/projects/nbc3.png';
 
